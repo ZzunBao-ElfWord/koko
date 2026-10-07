@@ -1,0 +1,8 @@
+# 把下面整段并入服务器现有 Caddyfile（与现有站点同级），然后 `docker exec <caddy容器> caddy reload --config /etc/caddy/Caddyfile`
+# 前提：Caddy 容器与 koko-admin 容器在同一 Docker 网络（.env 的 REVOLT_NETWORK）。
+# 建议在云安全组/防火墙层面仅放行办公 IP，或叠加 basicauth / access_log 告警。
+
+admin.konglingapp.com {
+	encode gzip
+	reverse_proxy koko-admin:8093
+}

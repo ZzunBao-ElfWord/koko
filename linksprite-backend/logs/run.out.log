@@ -1,0 +1,176 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2026-10-07 06:57:23.661 [main] INFO  c.linksprite.LinkSpriteApplication - Starting LinkSpriteApplication v1.0.0 using Java 17.0.20.1 with PID 39020 (C:\官网html\kongling\linksprite-backend\target\linksprite-backend-1.0.0.jar started by k'k in C:\官网html\kongling\linksprite-backend)
+2026-10-07 06:57:23.664 [main] INFO  c.linksprite.LinkSpriteApplication - The following 1 profile is active: "dev"
+2026-10-07 06:57:24.860 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-10-07 06:57:24.876 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-10-07 06:57:24.876 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2026-10-07 06:57:24.911 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-10-07 06:57:24.913 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1183 ms
+2026-10-07 06:57:24.972 [main] INFO  c.l.config.FiscoBcosClientConfig - ========== 初始化 FISCO BCOS SDK ==========
+2026-10-07 06:57:24.973 [main] INFO  c.l.config.FiscoBcosClientConfig - 加密类型: SM, 群组: group0, 链ID: 1000
+2026-10-07 06:57:24.975 [main] INFO  c.l.config.FiscoBcosClientConfig - 节点列表: [127.0.0.1:20200, 127.0.0.1:20201, 127.0.0.1:20202, 127.0.0.1:20203]
+2026-10-07 06:57:24.976 [main] INFO  c.l.config.FiscoBcosClientConfig - 证书目录校验通过: C:\官网html\kongling\linksprite-backend\cert
+2026-10-07 06:57:24.985 [main] INFO  c.l.config.FiscoBcosClientConfig - 节点可达: 127.0.0.1:20200
+2026-10-07 06:57:24.987 [main] INFO  c.l.config.FiscoBcosClientConfig - 节点可达: 127.0.0.1:20201
+2026-10-07 06:57:24.987 [main] INFO  c.l.config.FiscoBcosClientConfig - 节点可达: 127.0.0.1:20202
+2026-10-07 06:57:24.988 [main] INFO  c.l.config.FiscoBcosClientConfig - 节点可达: 127.0.0.1:20203
+2026-10-07 06:57:24.988 [main] INFO  c.l.config.FiscoBcosClientConfig - 节点可达性检查通过
+2026-10-07 06:57:27.105 [main] WARN  org.fisco.bcos.sdk.v3.BcosSDK - create client for failed, error: 
+org.fisco.bcos.sdk.jni.common.JniException: C:\vcpkg\buildtrees\fisco-bcos-cpp-sdk\src\ca52207e71-760710030d.clean\bcos-boostssl\bcos-boostssl\websocket\WsService.cpp(255): Throw in function syncConnectToEndpoints
+Dynamic exception type: struct boost::wrapexcept<class std::runtime_error>
+std::exception::what: [ ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20200,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20201,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20202,  ssl handshake failed ????÷?ú?????????????е?l??
+	at org.fisco.bcos.sdk.jni.rpc.RpcJniObj.start(Native Method)
+	at org.fisco.bcos.sdk.v3.client.ClientImpl.start(ClientImpl.java:1599)
+	at org.fisco.bcos.sdk.v3.client.ClientImpl.<init>(ClientImpl.java:176)
+	at org.fisco.bcos.sdk.v3.client.Client.build(Client.java:105)
+	at org.fisco.bcos.sdk.v3.BcosSDK.getClient(BcosSDK.java:87)
+	at com.linksprite.config.FiscoBcosClientConfig.init(FiscoBcosClientConfig.java:98)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMethod.invoke(InitDestroyAnnotationBeanPostProcessor.java:457)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeInitMethods(InitDestroyAnnotationBeanPostProcessor.java:401)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:219)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:422)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1778)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:975)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:962)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at com.linksprite.LinkSpriteApplication.main(LinkSpriteApplication.java:15)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+2026-10-07 06:57:27.108 [main] ERROR c.l.config.FiscoBcosClientConfig - FISCO BCOS SDK 初始化失败，根因: JniException - C:\vcpkg\buildtrees\fisco-bcos-cpp-sdk\src\ca52207e71-760710030d.clean\bcos-boostssl\bcos-boostssl\websocket\WsService.cpp(255): Throw in function syncConnectToEndpoints
+Dynamic exception type: struct boost::wrapexcept<class std::runtime_error>
+std::exception::what: [ ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20200,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20201,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20202,  ssl handshake failed ????÷?ú?????????????е?l??
+org.fisco.bcos.sdk.v3.BcosSDKException: get Client failed, e: C:\vcpkg\buildtrees\fisco-bcos-cpp-sdk\src\ca52207e71-760710030d.clean\bcos-boostssl\bcos-boostssl\websocket\WsService.cpp(255): Throw in function syncConnectToEndpoints
+Dynamic exception type: struct boost::wrapexcept<class std::runtime_error>
+std::exception::what: [ ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20200,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20201,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20202,  ssl handshake failed ????÷?ú?????????????е?l??
+	at org.fisco.bcos.sdk.v3.BcosSDK.getClient(BcosSDK.java:90)
+	at com.linksprite.config.FiscoBcosClientConfig.init(FiscoBcosClientConfig.java:98)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMethod.invoke(InitDestroyAnnotationBeanPostProcessor.java:457)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeInitMethods(InitDestroyAnnotationBeanPostProcessor.java:401)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:219)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:422)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1778)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:975)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:962)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at com.linksprite.LinkSpriteApplication.main(LinkSpriteApplication.java:15)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+Caused by: org.fisco.bcos.sdk.jni.common.JniException: C:\vcpkg\buildtrees\fisco-bcos-cpp-sdk\src\ca52207e71-760710030d.clean\bcos-boostssl\bcos-boostssl\websocket\WsService.cpp(255): Throw in function syncConnectToEndpoints
+Dynamic exception type: struct boost::wrapexcept<class std::runtime_error>
+std::exception::what: [ ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20200,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20201,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20202,  ssl handshake failed ????÷?ú?????????????е?l??
+	at org.fisco.bcos.sdk.jni.rpc.RpcJniObj.start(Native Method)
+	at org.fisco.bcos.sdk.v3.client.ClientImpl.start(ClientImpl.java:1599)
+	at org.fisco.bcos.sdk.v3.client.ClientImpl.<init>(ClientImpl.java:176)
+	at org.fisco.bcos.sdk.v3.client.Client.build(Client.java:105)
+	at org.fisco.bcos.sdk.v3.BcosSDK.getClient(BcosSDK.java:87)
+	... 33 common frames omitted
+2026-10-07 06:57:27.109 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'fiscoBcosClientConfig': Invocation of init method failed
+2026-10-07 06:57:27.110 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-10-07 06:57:27.122 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-10-07 06:57:27.132 [main] ERROR o.s.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'fiscoBcosClientConfig': Invocation of init method failed
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:222)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:422)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1778)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:975)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:962)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at com.linksprite.LinkSpriteApplication.main(LinkSpriteApplication.java:15)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+Caused by: java.lang.IllegalStateException: FISCO BCOS SDK 初始化失败: C:\vcpkg\buildtrees\fisco-bcos-cpp-sdk\src\ca52207e71-760710030d.clean\bcos-boostssl\bcos-boostssl\websocket\WsService.cpp(255): Throw in function syncConnectToEndpoints
+Dynamic exception type: struct boost::wrapexcept<class std::runtime_error>
+std::exception::what: [ ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20200,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20201,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20202,  ssl handshake failed ????÷?ú?????????????е?l??。请检查：节点是否启动、证书是否匹配、加密类型是否一致
+	at com.linksprite.config.FiscoBcosClientConfig.init(FiscoBcosClientConfig.java:115)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMethod.invoke(InitDestroyAnnotationBeanPostProcessor.java:457)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeInitMethods(InitDestroyAnnotationBeanPostProcessor.java:401)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:219)
+	... 25 common frames omitted
+Caused by: org.fisco.bcos.sdk.v3.BcosSDKException: get Client failed, e: C:\vcpkg\buildtrees\fisco-bcos-cpp-sdk\src\ca52207e71-760710030d.clean\bcos-boostssl\bcos-boostssl\websocket\WsService.cpp(255): Throw in function syncConnectToEndpoints
+Dynamic exception type: struct boost::wrapexcept<class std::runtime_error>
+std::exception::what: [ ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20200,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20201,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20202,  ssl handshake failed ????÷?ú?????????????е?l??
+	at org.fisco.bcos.sdk.v3.BcosSDK.getClient(BcosSDK.java:90)
+	at com.linksprite.config.FiscoBcosClientConfig.init(FiscoBcosClientConfig.java:98)
+	... 32 common frames omitted
+Caused by: org.fisco.bcos.sdk.jni.common.JniException: C:\vcpkg\buildtrees\fisco-bcos-cpp-sdk\src\ca52207e71-760710030d.clean\bcos-boostssl\bcos-boostssl\websocket\WsService.cpp(255): Throw in function syncConnectToEndpoints
+Dynamic exception type: struct boost::wrapexcept<class std::runtime_error>
+std::exception::what: [ ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20200,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20201,  ssl handshake failed ????÷?ú?????????????е?l???:/127.0.0.1:20202,  ssl handshake failed ????÷?ú?????????????е?l??
+	at org.fisco.bcos.sdk.jni.rpc.RpcJniObj.start(Native Method)
+	at org.fisco.bcos.sdk.v3.client.ClientImpl.start(ClientImpl.java:1599)
+	at org.fisco.bcos.sdk.v3.client.ClientImpl.<init>(ClientImpl.java:176)
+	at org.fisco.bcos.sdk.v3.client.Client.build(Client.java:105)
+	at org.fisco.bcos.sdk.v3.BcosSDK.getClient(BcosSDK.java:87)
+	... 33 common frames omitted

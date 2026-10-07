@@ -1,0 +1,19 @@
+services:
+  koko-admin:
+    build:
+      context: .
+      dockerfile: bff/Dockerfile
+    image: koko-admin:latest
+    container_name: koko-admin
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - revolt
+    # 直连调试时可临时打开；正式通过 Caddy 访问，不必暴露到宿主机公网
+    # ports:
+    #   - "127.0.0.1:8093:8093"
+
+networks:
+  revolt:
+    external: true
+    name: ${REVOLT_NETWORK}
