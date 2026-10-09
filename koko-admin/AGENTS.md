@@ -24,7 +24,7 @@ KOKO空空（基于 Stoat/Revolt 的 IM 业务）的**运营与审核管理后�
 | 前端 | Vite 6 + React 19 + TypeScript(strict) + Tailwind CSS v4 + TanStack Query v5 + React Router v7 + axios |
 | 后端 | Go 1.23 + Gin + 官方 mongo-go-driver + golang-jwt/v5 + bcrypt |
 | 部署 | **单容器**：Web 构建产物 `go:embed` 进 Go 二进制；distroless 静态镜像 |
-| 接入 | 现有 Caddy 反代 `admin.konglingapp.com → koko-admin:8093` |
+| 接入 | 现有 Caddy 反代 `admin.kokokongkong.com → koko-admin:8093` |
 
 - 前端 UI 基座：先使用本仓库 `src/components/ui/` 的手写原子组件；
   扩展复杂组件时用 `npx shadcn@latest init` + `npx shadcn@latest add <组件>` 引入 shadcn/ui（源码进仓库，可直接改）。
