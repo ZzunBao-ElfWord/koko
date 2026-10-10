@@ -33,6 +33,9 @@ func New(d handler.Deps, auditCol *mongo.Collection, adminUsersCol *mongo.Collec
 	// 公开：登录
 	api.POST("/auth/login", d.Login)
 
+	// 公开：B 端合作申请（限流，无 JWT）
+	api.POST("/public/b2b-apply", middleware.RateLimit(5, time.Minute), d.SubmitB2bApply)
+
 	// 需登录
 	authed := api.Group("")
 	authed.Use(middleware.JWTAuth(d.Cfg.JWTSecret, adminUsersCol))
@@ -87,8 +90,15 @@ func New(d handler.Deps, auditCol *mongo.Collection, adminUsersCol *mongo.Collec
 		authed.DELETE("/spaces/:id/members/:uid", modOnly, d.KickSpaceMember)
 		authed.DELETE("/channels/:cid", modOnly, d.DeleteChannel)
 
-		// Delta 管理动作透传（兜底通道）
-		authed.Any("/delta/*proxy", modOnly, d.DeltaProxy)
+	// 连接精灵链（NFT 融合）：查询 super/moderator；写操作在 handler 内仅放行 super
+		authed.Any("/chain/*proxy", modOnly, d.LinkSpriteProxy)
+
+		// B 端合作申请管理
+		authed.GET("/b2b/applications", modOnly, d.ListB2bApplications)
+		authed.PATCH("/b2b/applications/:id", modOnly, d.UpdateB2bApplicationStatus)
+
+	// Delta 管理动作透传（兜底通道）
+	authed.Any("/delta/*proxy", modOnly, d.DeltaProxy)
 	}
 
 	// 审计：super / operator

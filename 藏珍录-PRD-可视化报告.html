@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>藏珍录 · MVP PRD 可视化报告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Cormorant+Garamond:wght@500;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1B1714;
+  --ink-2:#241E18;
+  --ink-3:#332B22;
+  --ink-4:#3D3429;
+  --paper:#E8DCC4;
+  --paper-2:#D9C9A8;
+  --bone:#EDE3CC;
+  --bone-dim:#A89B82;
+  --bone-faint:#6E6553;
+  --cinnabar:#B33A2E;
+  --cinnabar-d:#8C2A20;
+  --cinnabar-l:#D45A4A;
+  --bronze:#8FA68E;
+  --bronze-d:#5D6D5E;
+  --gold:#C9A961;
+  --gold-d:#A8863F;
+  --gold-l:#E0C684;
+  --jade:#6B8E7F;
+  --line:rgba(201,169,97,.22);
+  --line-2:rgba(201,169,97,.4);
+  --f-display:'Noto Serif SC',serif;
+  --f-body:'Noto Sans SC',sans-serif;
+  --f-num:'Cormorant Garamond',serif;
+  --f-stamp:'Ma Shan Zheng',cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--f-body);
+  background:var(--ink);
+  color:var(--bone);
+  line-height:1.7;
+  font-weight:300;
+  overflow-x:hidden;
+  position:relative;
+}
+/* 宣纸噪点纹理 */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.8 0 0 0 0 0.7 0 0 0 0 0.5 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+/* 背景晕染 */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse at 15% 10%, rgba(201,169,97,.08), transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(179,58,46,.06), transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(143,166,142,.04), transparent 60%);
+}
+.wrap{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:0 24px}
+
+/* ============ HERO ============ */
+.hero{
+  padding:90px 0 60px;position:relative;text-align:center;
+  border-bottom:1px solid var(--line);
+}
+.hero-eyebrow{
+  font-family:var(--f-num);letter-spacing:.4em;text-transform:uppercase;
+  color:var(--gold);font-size:13px;margin-bottom:24px;font-weight:600;
+}
+.hero-title{
+  font-family:var(--f-display);font-weight:900;
+  font-size:clamp(64px,11vw,140px);line-height:1;
+  color:var(--bone);
+  letter-spacing:.08em;
+  text-shadow:0 0 40px rgba(201,169,97,.15);
+  position:relative;display:inline-block;
+}
+.hero-title .char{display:inline-block;animation:dropIn .8s cubic-bezier(.2,.8,.2,1) backwards}
+.hero-title .char:nth-child(1){animation-delay:.1s}
+.hero-title .char:nth-child(2){animation-delay:.25s}
+.hero-title .char:nth-child(3){animation-delay:.4s}
+@keyframes dropIn{from{opacity:0;transform:translateY(-30px) rotate(-8deg)}to{opacity:1;transform:none}}
+.hero-en{
+  font-family:var(--f-num);font-style:italic;font-weight:500;
+  font-size:clamp(18px,2.4vw,26px);color:var(--bone-dim);
+  letter-spacing:.18em;margin-top:14px;
+}
+.hero-sub{
+  margin-top:30px;font-size:15px;color:var(--bone-dim);
+  letter-spacing:.15em;
+}
+.hero-sub b{color:var(--gold);font-weight:500}
+.stamp-row{
+  margin-top:46px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap;
+}
+.stamp{
+  border:2px solid var(--cinnabar);color:var(--cinnabar);
+  padding:10px 22px;font-family:var(--f-display);font-weight:700;font-size:14px;
+  letter-spacing:.2em;border-radius:4px;position:relative;
+  background:rgba(179,58,46,.04);
+  box-shadow:0 0 0 1px rgba(179,58,46,.15) inset;
+  transform:rotate(-1.5deg);
+}
+.stamp:nth-child(2){transform:rotate(1deg)}
+.stamp:nth-child(3){transform:rotate(-2deg)}
+.stamp::after{
+  content:"";position:absolute;inset:-3px;border:1px dashed rgba(179,58,46,.35);border-radius:5px;pointer-events:none;
+}
+/* 青铜回纹分隔 */
+.greek-border{
+  height:24px;margin:0 auto;max-width:600px;opacity:.45;
+  background:
+    repeating-linear-gradient(90deg, var(--gold) 0 2px, transparent 2px 12px),
+    repeating-linear-gradient(90deg, transparent 0 4px, var(--gold-d) 4px 6px, transparent 6px 12px);
+  mask:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent);
+}
+
+/* ============ TAB NAV ============ */
+.tabs{
+  position:sticky;top:0;z-index:50;
+  background:rgba(27,23,20,.85);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  margin-top:20px;
+}
+.tabs-inner{
+  max-width:1240px;margin:0 auto;padding:14px 24px;
+  display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
+}
+.tabs-inner::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto;background:transparent;border:1px solid transparent;
+  color:var(--bone-dim);font-family:var(--f-display);font-weight:700;
+  font-size:15px;padding:9px 18px;border-radius:6px;cursor:pointer;
+  white-space:nowrap;letter-spacing:.08em;transition:all .25s;
+  position:relative;
+}
+.tab:hover{color:var(--gold-l)}
+.tab.active{
+  color:var(--ink);background:var(--gold);border-color:var(--gold-l);
+  box-shadow:0 4px 18px rgba(201,169,97,.25);
+}
+.tab .idx{
+  font-family:var(--f-num);font-style:italic;opacity:.6;margin-right:6px;font-size:12px;
+}
+
+/* ============ SECTIONS ============ */
+.section{display:none;padding:54px 0 30px;animation:fadeUp .5s ease}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.sec-head{margin-bottom:38px}
+.sec-num{
+  font-family:var(--f-num);font-style:italic;font-weight:600;
+  color:var(--gold);font-size:18px;letter-spacing:.1em;
+}
+.sec-title{
+  font-family:var(--f-display);font-weight:900;
+  font-size:clamp(28px,4.2vw,42px);color:var(--bone);
+  letter-spacing:.05em;margin-top:6px;line-height:1.2;
+}
+.sec-title .accent{color:var(--cinnabar-l)}
+.sec-desc{color:var(--bone-dim);margin-top:12px;font-size:15px;max-width:680px}
+
+/* ============ CARDS ============ */
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:860px){.g2,.g3{grid-template-columns:1fr}}
+.card{
+  background:linear-gradient(155deg,var(--ink-2),var(--ink-3));
+  border:1px solid var(--line);border-radius:10px;
+  padding:26px;position:relative;overflow:hidden;
+  transition:transform .3s,border-color .3s,box-shadow .3s;
+}
+.card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.5;
+}
+.card:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.card-tag{
+  display:inline-block;font-family:var(--f-num);font-style:italic;
+  font-size:13px;color:var(--bronze);letter-spacing:.15em;margin-bottom:12px;
+  border-bottom:1px solid var(--bronze-d);padding-bottom:2px;
+}
+.card-h{
+  font-family:var(--f-display);font-weight:700;font-size:19px;
+  color:var(--gold-l);margin-bottom:12px;letter-spacing:.03em;
+}
+.card p{color:var(--bone);font-size:14.5px;margin-bottom:10px}
+.card p:last-child{margin-bottom:0}
+.card .hl{color:var(--cinnabar-l);font-weight:500}
+.card .gn{color:var(--gold-l);font-weight:500}
+
+/* 北极星卡 */
+.northstar{
+  background:linear-gradient(135deg,var(--cinnabar-d),var(--cinnabar));
+  border-color:var(--cinnabar-l);color:var(--bone);
+}
+.northstar::before{background:linear-gradient(90deg,transparent,var(--gold-l),transparent);opacity:.7}
+.northstar .card-h{color:#fff}
+.northstar .card-tag{color:var(--gold-l);border-color:var(--gold-l)}
+.ns-metric{
+  font-family:var(--f-num);font-weight:700;font-size:34px;line-height:1;
+  color:#fff;margin:14px 0 8px;letter-spacing:.02em;
+}
+.ns-metric small{font-size:15px;color:var(--gold-l);font-weight:500;font-style:italic}
+.northstar p{color:rgba(255,255,255,.85)}
+
+/* ============ 流程图 ============ */
+.flow{margin:30px 0}
+.flow-chain{
+  display:flex;flex-wrap:wrap;align-items:stretch;gap:0;justify-content:center;
+}
+.node{
+  background:linear-gradient(155deg,var(--ink-3),var(--ink-2));
+  border:1px solid var(--line-2);border-radius:8px;
+  padding:14px 18px;min-width:120px;max-width:180px;
+  position:relative;cursor:pointer;transition:all .3s;
+  text-align:center;
+}
+.node:hover,.node.on{
+  border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 8px 24px rgba(201,169,97,.2);
+  transform:translateY(-2px);
+}
+.node.on{background:linear-gradient(155deg,var(--cinnabar-d),var(--ink-3))}
+.node-idx{
+  font-family:var(--f-num);font-style:italic;color:var(--gold);
+  font-size:13px;font-weight:600;display:block;margin-bottom:4px;
+}
+.node-t{font-family:var(--f-display);font-weight:700;font-size:14px;color:var(--bone);letter-spacing:.04em}
+.node-s{font-size:11px;color:var(--bone-dim);margin-top:4px}
+.arrow{
+  align-self:center;color:var(--gold);font-family:var(--f-num);font-size:22px;
+  padding:0 8px;font-weight:700;transition:transform .3s;
+}
+.arrow.branch{transform:rotate(90deg)}
+.branch-wrap{flex-basis:100%;display:flex;justify-content:center;padding:6px 0}
+.branch-inner{display:flex;gap:0;align-items:stretch;flex-wrap:wrap;justify-content:center}
+.legend{
+  margin-top:22px;font-size:13px;color:var(--bone-dim);text-align:center;
+  font-family:var(--f-num);font-style:italic;letter-spacing:.05em;
+}
+.legend span{color:var(--cinnabar-l);font-weight:600}
+
+/* 状态机 */
+.sm{
+  margin-top:36px;background:var(--ink-2);border:1px solid var(--line);
+  border-radius:10px;padding:28px;
+}
+.sm-title{font-family:var(--f-display);font-weight:700;color:var(--gold-l);font-size:18px;margin-bottom:22px;letter-spacing:.05em}
+.sm-title .en{font-family:var(--f-num);font-style:italic;color:var(--bronze);font-size:14px;margin-left:8px;font-weight:500}
+.sm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;position:relative}
+.sm-node{
+  border:1px solid var(--line-2);border-radius:50px;padding:10px 8px;text-align:center;
+  background:linear-gradient(155deg,var(--ink-3),var(--ink-2));cursor:pointer;
+  transition:all .3s;position:relative;
+}
+.sm-node:hover{border-color:var(--gold);color:var(--gold-l)}
+.sm-node.start{border-color:var(--bronze)}
+.sm-node.end{border-color:var(--cinnabar);background:linear-gradient(155deg,var(--cinnabar-d),var(--ink-3))}
+.sm-node .n{font-family:var(--f-display);font-weight:700;font-size:14px;color:var(--bone)}
+.sm-node .e{font-family:var(--f-num);font-style:italic;font-size:11px;color:var(--bone-dim);margin-top:3px}
+.sm-trans{font-size:12px;color:var(--bone-dim);margin-top:18px;line-height:1.9}
+.sm-trans b{color:var(--gold-l);font-weight:500}
+
+/* ============ 功能表 ============ */
+.fn-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
+@media(max-width:860px){.fn-grid{grid-template-columns:1fr}}
+.fn{
+  border:1px solid var(--line);border-radius:8px;overflow:hidden;
+  background:linear-gradient(155deg,var(--ink-2),var(--ink-3));
+  transition:border-color .3s;
+}
+.fn-head{
+  display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;
+  transition:background .3s;
+}
+.fn-head:hover{background:rgba(201,169,97,.05)}
+.fn-id{
+  font-family:var(--f-num);font-style:italic;font-weight:700;
+  color:var(--ink);background:var(--gold);font-size:15px;
+  width:36px;height:36px;border-radius:50%;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;letter-spacing:.02em;
+}
+.fn-titles{flex:1}
+.fn-name{font-family:var(--f-display);font-weight:700;color:var(--bone);font-size:16px}
+.fn-cat{font-size:11px;color:var(--bronze);letter-spacing:.1em;margin-top:2px}
+.fn-toggle{
+  color:var(--gold);font-size:18px;transition:transform .3s;flex:0 0 auto;
+}
+.fn.open .fn-toggle{transform:rotate(45deg)}
+.fn-body{display:none;padding:0 20px 20px;border-top:1px solid var(--line);margin-top:0}
+.fn.open .fn-body{display:block}
+.fn-body{padding-top:16px}
+.fn-row{display:flex;gap:14px;margin-bottom:10px;font-size:13.5px}
+.fn-row .k{
+  flex:0 0 70px;color:var(--gold);font-family:var(--f-num);font-style:italic;
+  font-weight:600;letter-spacing:.05em;font-size:12.5px;padding-top:2px;
+}
+.fn-row .v{color:var(--bone);flex:1}
+
+/* ============ 文物品阶 ============ */
+.grade-table{margin-top:28px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.grade-row{
+  display:grid;grid-template-columns:90px 1fr 100px 120px;align-items:center;
+  padding:18px 22px;border-bottom:1px solid var(--line);gap:18px;
+  transition:background .3s;
+}
+.grade-row:last-child{border-bottom:none}
+.grade-row:hover{background:rgba(201,169,97,.04)}
+.grade-name{font-family:var(--f-display);font-weight:900;font-size:20px;letter-spacing:.1em}
+.grade-bar{height:8px;border-radius:4px;background:var(--ink-3);overflow:hidden;position:relative}
+.grade-bar i{display:block;height:100%;border-radius:4px}
+.grade-w{font-family:var(--f-num);font-style:italic;color:var(--bone-dim);font-size:14px;text-align:right}
+.grade-y{font-size:12.5px;color:var(--bronze);text-align:right;letter-spacing:.05em}
+@media(max-width:680px){
+  .grade-row{grid-template-columns:80px 1fr 70px;gap:10px;padding:14px}
+  .grade-y{display:none}
+}
+.g1{color:#9B9584}.g1 .grade-bar i{background:linear-gradient(90deg,#6E6553,#9B9584);width:88%}
+.g2{color:#B5A98F}.g2 .grade-bar i{background:linear-gradient(90deg,#8FA68E,#B5A98F);width:62%}
+.g3{color:var(--gold-l)}.g3 .grade-bar i{background:linear-gradient(90deg,var(--gold-d),var(--gold-l));width:38%}
+.g4{color:var(--cinnabar-l)}.g4 .grade-bar i{background:linear-gradient(90deg,var(--bronze-d),var(--cinnabar-l));width:18%}
+.g5{color:var(--cinnabar-l);text-shadow:0 0 12px rgba(212,90,74,.4)}.g5 .grade-bar i{background:linear-gradient(90deg,var(--cinnabar-d),var(--cinnabar-l),var(--gold-l));width:6%}
+
+/* ============ 指标看板 ============ */
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
+@media(max-width:860px){.metric-grid{grid-template-columns:repeat(2,1fr)}}
+.metric{
+  background:linear-gradient(155deg,var(--ink-2),var(--ink-3));
+  border:1px solid var(--line);border-radius:10px;padding:22px;
+  position:relative;overflow:hidden;
+}
+.metric::after{content:"";position:absolute;right:-20px;bottom:-20px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,97,.08),transparent);pointer-events:none}
+.metric-cat{font-family:var(--f-num);font-style:italic;color:var(--bronze);font-size:12px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.metric-name{font-family:var(--f-display);font-weight:700;color:var(--bone);font-size:15px;line-height:1.5;min-height:42px}
+.metric-use{font-size:12px;color:var(--bone-dim);margin-top:10px;border-top:1px solid var(--line);padding-top:10px;line-height:1.6}
+.metric-use b{color:var(--gold-l);font-weight:500}
+.tracking-note{margin-top:24px;padding:20px;border-left:3px solid var(--gold);background:rgba(201,169,97,.04);border-radius:0 8px 8px 0;font-size:13.5px;color:var(--bone-dim)}
+.tracking-note b{color:var(--gold-l)}
+
+/* ============ 风险/路线 ============ */
+.risk-table{margin-top:28px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.risk-row{
+  display:grid;grid-template-columns:1fr 80px 80px 1.4fr;gap:18px;
+  padding:18px 22px;border-bottom:1px solid var(--line);align-items:center;
+}
+.risk-row:last-child{border-bottom:none}
+.risk-row:hover{background:rgba(201,169,97,.03)}
+.risk-name{font-size:14px;color:var(--bone);font-weight:500}
+.risk-p,.risk-i{text-align:center;font-family:var(--f-num);font-style:italic;font-size:13px}
+.pill{display:inline-block;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.05em}
+.pill-h{background:rgba(179,58,46,.18);color:var(--cinnabar-l);border:1px solid var(--cinnabar-d)}
+.pill-m{background:rgba(201,169,97,.14);color:var(--gold-l);border:1px solid var(--gold-d)}
+.pill-l{background:rgba(143,166,142,.14);color:var(--bronze);border:1px solid var(--bronze-d)}
+.risk-fix{font-size:13px;color:var(--bone-dim);line-height:1.6}
+.risk-fix b{color:var(--gold-l);font-weight:500}
+@media(max-width:760px){
+  .risk-row{grid-template-columns:1fr;gap:8px}
+  .risk-p,.risk-i{text-align:left}
+}
+
+/* 时间线 */
+.timeline{margin-top:40px;position:relative;padding-left:36px}
+.timeline::before{content:"";position:absolute;left:14px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--gold),var(--cinnabar-d));border-radius:2px}
+.tl-item{position:relative;padding-bottom:26px}
+.tl-item:last-child{padding-bottom:0}
+.tl-dot{position:absolute;left:-30px;top:2px;width:18px;height:18px;border-radius:50%;background:var(--ink);border:2px solid var(--gold);box-shadow:0 0 0 4px var(--ink)}
+.tl-item.active .tl-dot{background:var(--cinnabar);border-color:var(--cinnabar-l)}
+.tl-step{font-family:var(--f-num);font-style:italic;color:var(--gold);font-size:13px;letter-spacing:.1em}
+.tl-title{font-family:var(--f-display);font-weight:700;color:var(--bone);font-size:16px;margin:4px 0 6px}
+.tl-desc{font-size:13px;color:var(--bone-dim);line-height:1.6}
+
+/* 迭代阶段 */
+.phases{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:36px}
+@media(max-width:860px){.phases{grid-template-columns:repeat(2,1fr)}}
+.phase{
+  border:1px solid var(--line);border-radius:8px;padding:22px;
+  background:linear-gradient(160deg,var(--ink-2),var(--ink-3));
+  position:relative;transition:all .3s;
+}
+.phase:hover{border-color:var(--gold);transform:translateY(-3px)}
+.phase-tag{font-family:var(--f-num);font-style:italic;font-weight:700;color:var(--gold);font-size:14px;letter-spacing:.1em}
+.phase-name{font-family:var(--f-display);font-weight:900;color:var(--bone);font-size:20px;margin:6px 0 10px;letter-spacing:.05em}
+.phase.curr{border-color:var(--cinnabar);background:linear-gradient(160deg,var(--cinnabar-d),var(--ink-3))}
+.phase.curr .phase-tag,.phase.curr .phase-name{color:var(--cinnabar-l)}
+.phase-desc{font-size:12.5px;color:var(--bone-dim);line-height:1.6}
+.phase-curr-flag{position:absolute;top:12px;right:12px;font-size:10px;color:var(--cinnabar-l);border:1px solid var(--cinnabar);padding:2px 8px;border-radius:3px;letter-spacing:.1em}
+
+/* footer */
+.footer{
+  margin-top:60px;padding:40px 0;border-top:1px solid var(--line);text-align:center;
+}
+.footer .seal{
+  display:inline-block;width:72px;height:72px;border:2px solid var(--cinnabar);
+  color:var(--cinnabar);font-family:var(--f-stamp);font-size:30px;
+  line-height:68px;border-radius:8px;transform:rotate(-4deg);
+  background:rgba(179,58,46,.06);margin-bottom:16px;
+  box-shadow:0 0 0 1px rgba(179,58,46,.2) inset;
+}
+.footer p{color:var(--bone-faint);font-size:12px;letter-spacing:.1em;font-family:var(--f-num);font-style:italic}
+
+/* hover 高亮路径连线 */
+.node{position:relative}
+.dim{opacity:.35;transition:opacity .3s}
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">MVP · Product Requirements Document</div>
+    <h1 class="hero-title"><span class="char">藏</span><span class="char">珍</span><span class="char">录</span></h1>
+    <div class="hero-en">Cáng Zhēn Lù · The Relic Archive</div>
+    <div class="hero-sub">考古寻宝轻量 ARPG · <b>搜 · 打 · 撤</b> 单局循环 · 手机端休闲玩家</div>
+    <div class="stamp-row">
+      <span class="stamp">版本 MVP v0.1</span>
+      <span class="stamp">2026 · 10 · 09</span>
+      <span class="stamp">状态 草案</span>
+    </div>
+    <div class="greek-border" style="margin-top:50px"></div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button class="tab active" data-tab="0"><span class="idx">壹</span>概览</button>
+    <button class="tab" data-tab="1"><span class="idx">贰</span>核心循环</button>
+    <button class="tab" data-tab="2"><span class="idx">叁</span>功能需求</button>
+    <button class="tab" data-tab="3"><span class="idx">肆</span>文物系统</button>
+    <button class="tab" data-tab="4"><span class="idx">伍</span>数据指标</button>
+    <button class="tab" data-tab="5"><span class="idx">陆</span>风险路线</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ============ 概览 ============ -->
+<section class="section active" data-sec="0">
+  <div class="sec-head">
+    <div class="sec-num">— 壹 —</div>
+    <h2 class="sec-title">需求背景与 <span class="accent">验证假设</span></h2>
+    <p class="sec-desc">以低开发成本切入考古寻宝题材，用轻量 ARPG 形态承接"搜打撤"的紧张感与单局闭环。MVP 阶段先回答一个问题——休闲玩家愿不愿意为了"把这件文物带出去"反复进入同一个遗迹。</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <span class="card-tag">背景 · CONTEXT</span>
+      <h3 class="card-h">为何要做</h3>
+      <p>文物搜集天然具备<span class="hl">图鉴驱动</span>、<span class="hl">长线收集</span>、<span class="hl">历史故事性</span>三重钩子，比纯军火物资搜集更有情感黏性，且能承载轻科普差异点。</p>
+      <p>当前市面同类多为重度 MMO 或纯放置卡牌，缺一个"单局 10 分钟、点击即玩、有撤离紧张感"的轻量形态。</p>
+    </div>
+    <div class="card">
+      <span class="card-tag">代价 · COST</span>
+      <h3 class="card-h">不验证就投入的代价</h3>
+      <p>若"搜打撤 + 文物"循环在手机休闲玩家身上不成立，后续所有养成与商业化投入都是<span class="hl">沉没成本</span>。</p>
+      <p>故 MVP 不接商业化，先验证核心循环是否成立，再决定是否推进 GA。</p>
+    </div>
+  </div>
+
+  <div class="grid g3" style="margin-top:20px">
+    <div class="card">
+      <span class="card-tag">假设 一</span>
+      <h3 class="card-h">循环假设</h3>
+      <p>玩家能在 <span class="gn">5–15 分钟</span>内完整跑通"进遗迹→探索→战斗→撤离→结算带回文物"，且愿意当天再开第二局。</p>
+    </div>
+    <div class="card">
+      <span class="card-tag">假设 二</span>
+      <h3 class="card-h">撤离紧张感假设</h3>
+      <p>撤离阶段的追击与掉落惩罚能制造可感知的<span class="hl">心跳</span>，而非无脑带出。</p>
+    </div>
+    <div class="card">
+      <span class="card-tag">假设 三</span>
+      <h3 class="card-h">文物驱动假设</h3>
+      <p>图鉴解锁与稀有文物掉落能驱动<span class="gn">"再来一局"</span>的动机。</p>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:20px">
+    <div class="card northstar">
+      <span class="card-tag">★ 北极星</span>
+      <h3 class="card-h">首日核心循环完成率</h3>
+      <div class="ns-metric">搜索→战斗→撤离→结算带回 <small>≥ 1 件文物</small></div>
+      <p>完成该完整闭环的玩家占比。判定循环是否成立的 go / no-go 闸门。目标值待确认，参考轻量 ARPG 行业基准。</p>
+    </div>
+    <div class="card">
+      <span class="card-tag">用户 · USERS</span>
+      <h3 class="card-h">目标玩家</h3>
+      <p><b style="color:var(--gold-l)">休闲碎片党（主）</b>：每天 2–3 段 10 分钟空档，点开即玩，输了不心疼。</p>
+      <p><b style="color:var(--bronze)">文物/历史爱好者（次）</b>：图鉴收集驱动，科普彩蛋加分。</p>
+      <p style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px;font-size:13px;color:var(--bone-dim)">使用前置：联网 · 已过 ≤90 秒极简新手引导</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 核心循环 ============ -->
+<section class="section" data-sec="1">
+  <div class="sec-head">
+    <div class="sec-num">— 贰 —</div>
+    <h2 class="sec-title">搜 · 打 · 撤 <span class="accent">单局循环</span></h2>
+    <p class="sec-desc">单局从大厅选关开始，探索、战斗、拾取并行，直到撤离条件触发后进入撤离段，最终无论成功失败都进入结算。结算后回大厅，循环闭合。点击任意节点可高亮路径。</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-chain" id="flow">
+      <div class="node" data-id="A"><span class="node-idx">A</span><div class="node-t">大厅选关</div><div class="node-s">局外发散</div></div>
+      <span class="arrow">→</span>
+      <div class="node" data-id="B"><span class="node-idx">B</span><div class="node-t">遗迹探索</div><div class="node-s">点击移动·迷雾开图</div></div>
+      <span class="arrow">⇢</span>
+      <div class="node" data-id="C"><span class="node-idx">C</span><div class="node-t">触发点</div><div class="node-s">敌人/文物/解谜</div></div>
+    </div>
+    <div class="branch-wrap">
+      <div class="branch-inner">
+        <span class="arrow" style="transform:rotate(90deg)">↑</span>
+        <div class="node" data-id="D"><span class="node-idx">D</span><div class="node-t">战斗</div><div class="node-s">点击锁敌·技能</div></div>
+        <span class="arrow">→</span>
+        <div class="node" data-id="E"><span class="node-idx">E</span><div class="node-t">拾取入背包</div><div class="node-s">未鉴定形态</div></div>
+        <span class="arrow">→</span>
+        <div class="node" data-id="G"><span class="node-idx">G</span><div class="node-t">阈值判断</div><div class="node-s">惊动值/时长</div></div>
+        <span class="arrow">↓</span>
+        <div class="node" data-id="H"><span class="node-idx">H</span><div class="node-t">撤离倒计时</div><div class="node-s">前往撤离点</div></div>
+        <span class="arrow">→</span>
+        <div class="node" data-id="I"><span class="node-idx">I</span><div class="node-t">撤退途中</div><div class="node-s">遭追击</div></div>
+      </div>
+    </div>
+    <div class="branch-wrap">
+      <div class="branch-inner">
+        <div class="node" data-id="J"><span class="node-idx">J</span><div class="node-t">撤离成功</div><div class="node-s">带回全部文物</div></div>
+        <span class="arrow">/</span>
+        <div class="node" data-id="K"><span class="node-idx">K</span><div class="node-t">撤离失败</div><div class="node-s">丢未鉴定</div></div>
+        <span class="arrow">→</span>
+        <div class="node" data-id="L"><span class="node-idx">L</span><div class="node-t">结算·鉴定</div><div class="node-s">入图鉴·回 A</div></div>
+      </div>
+    </div>
+    <p class="legend">— <span>失败不结束整局</span>，直接进结算（已鉴定保留，未鉴定丢失）—</p>
+  </div>
+
+  <!-- 战斗状态机 -->
+  <div class="sm">
+    <div class="sm-title">战斗状态机 <span class="en">Combat FSM</span></div>
+    <div class="sm-grid">
+      <div class="sm-node start"><div class="n">探索态</div><div class="e">idle</div></div>
+      <div class="sm-node"><div class="n">锁敌</div><div class="e">click enemy</div></div>
+      <div class="sm-node"><div class="n">自动攻击</div><div class="e">auto attack</div></div>
+      <div class="sm-node"><div class="n">技能释放</div><div class="e">skill btn</div></div>
+      <div class="sm-node end"><div class="n">死亡</div><div class="e">hp=0</div></div>
+    </div>
+    <div class="sm-trans">
+      探索态 <b>→</b> 锁敌（点敌人） · 锁敌 <b>→</b> 自动攻击（进射程） · 自动攻击 <b>↔</b> 技能释放（点技能/动画结束） · 自动攻击 <b>→</b> 探索态（敌全灭/脱战 3s） · 自动攻击 <b>→</b> 死亡（血量归零，进撤离失败结算）
+    </div>
+  </div>
+
+  <!-- 撤离状态机 -->
+  <div class="sm">
+    <div class="sm-title">撤离状态机 <span class="en">Extraction FSM</span></div>
+    <div class="sm-grid">
+      <div class="sm-node start"><div class="n">探索中</div><div class="e">roaming</div></div>
+      <div class="sm-node"><div class="n">撤离倒计时</div><div class="e">alert full</div></div>
+      <div class="sm-node"><div class="n">撤退途中</div><div class="e">moving</div></div>
+      <div class="sm-node"><div class="n">追击战</div><div class="e">ambush</div></div>
+      <div class="sm-node end"><div class="n">撤离成功</div><div class="e">extract</div></div>
+      <div class="sm-node end"><div class="n">撤离失败</div><div class="e">timeout/death</div></div>
+    </div>
+    <div class="sm-trans">
+      探索中 <b>→</b> 撤离倒计时（惊动值满/时长到/主动撤离） · 倒计时 <b>→</b> 撤退途中 · 途中 <b>↔</b> 追击战（遭追击/击退脱战） · 途中 <b>→</b> 撤离成功（到达撤离点） · 途中 <b>→</b> 撤离失败（倒计时归零/血量归零）
+    </div>
+  </div>
+</section>
+
+<!-- ============ 功能需求 ============ -->
+<section class="section" data-sec="2">
+  <div class="sec-head">
+    <div class="sec-num">— 叁 —</div>
+    <h2 class="sec-title">功能需求 <span class="accent">12 项</span></h2>
+    <p class="sec-desc">点击卡片展开业务/交互/规则/边界四维详情。功能编号对应原型与埋点引用。</p>
+  </div>
+
+  <div class="fn-grid" id="fnGrid">
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">1</div><div class="fn-titles"><div class="fn-name">局外大厅</div><div class="fn-cat">HUB · 局外</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">玩家主界面入口，展示角色/等级/金币/装备文物，底部 Tab 切出征/图鉴/藏宝阁/养成，主按钮进选关。</div></div>
+        <div class="fn-row"><div class="k">交互</div><div class="v">底栏 Tab 切换四个局外页面；主按钮始终指向出征；角色展示区点击进养成-装备页。</div></div>
+        <div class="fn-row"><div class="k">边界</div><div class="v">未首通时藏宝阁/图鉴为空状态引导；金币 MVP 仅记录不消费。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">2</div><div class="fn-titles"><div class="fn-name">遗迹选择</div><div class="fn-cat">MISSION · 局外</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">列表式展示已解锁遗迹（≥3 个），每项含名称/推荐等级/特色文物预览/是否首通，确认后载入局内。</div></div>
+        <div class="fn-row"><div class="k">规则</div><div class="v">首次进入需走新手引导；未达推荐等级允许进入但提示风险。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">3</div><div class="fn-titles"><div class="fn-name">职业系统</div><div class="fn-cat">CLASS · 养成</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">3 职业轻量：盗墓客（侦察/机动）、考古学者（鉴定/辅助）、武师（战斗/输出）。每职业 3–4 技能。</div></div>
+        <div class="fn-row"><div class="k">规则</div><div class="v">出征前选定，局内不可换；职业差异仅通过技能与被动体现，不引入天赋树。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">4</div><div class="fn-titles"><div class="fn-name">遗迹探索</div><div class="fn-cat">SEARCH · 局内</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">2D 俯视，点地面移动自动寻路，迷雾逐步开图，分布文物点/宝箱/解谜点/敌人巡逻区。</div></div>
+        <div class="fn-row"><div class="k">交互</div><div class="v">靠近文物点弹拾取交互，靠近敌人触发战斗。</div></div>
+        <div class="fn-row"><div class="k">边界</div><div class="v">断线 30s 内可重连恢复局内状态，超时按撤离失败处理。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">5</div><div class="fn-titles"><div class="fn-name">战斗</div><div class="fn-cat">FIGHT · 局内</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">传奇式点击 ARPG：点敌人锁敌自动普攻，点技能按钮释放（CD/能量），点地面脱战。</div></div>
+        <div class="fn-row"><div class="k">规则</div><div class="v">3–4 技能，1 大招（能量条满可用，能量由普攻与受击积累）；脱战=脱离追击范围 3s。</div></div>
+        <div class="fn-row"><div class="k">边界</div><div class="v">死亡不结束单局，直接进撤离失败结算。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">6</div><div class="fn-titles"><div class="fn-name">撤离</div><div class="fn-cat">EXTRACT · 局内</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">惊动值满/时长达上限/主动撤离 → 撤离倒计时；走到撤离点撤离；途遇追击战。</div></div>
+        <div class="fn-row"><div class="k">规则</div><div class="v">倒计时 60s（待确认）；每遗迹 1–2 撤离点；成功带全部，失败丢全部未鉴定（已鉴定保留）。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">7</div><div class="fn-titles"><div class="fn-name">局内 HUD</div><div class="fn-cat">HUD · 局内</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">左上血条/能量，右上惊动值/计时器/小地图，右下技能组，左下背包/撤离按钮，随场景切换。</div></div>
+        <div class="fn-row"><div class="k">规则</div><div class="v">技能 CD 圆形遮罩+数字倒计时；惊动值 80% 变红高亮；热区 ≥44pt。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">8</div><div class="fn-titles"><div class="fn-name">文物系统</div><div class="fn-cat">RELIC · 核心</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">5 品阶，含年代/出处/品阶/鉴赏值/被动词条。局内未鉴定入背包，考古学者可即时鉴定，余职业局后鉴定。</div></div>
+        <div class="fn-row"><div class="k">规则</div><div class="v">背包 12 格（待确认）；满载需替换或放弃；可装备 1 件为传家宝提供被动。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">9</div><div class="fn-titles"><div class="fn-name">文物图鉴</div><div class="fn-cat">CODEX · 局外</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">按年代/遗迹分类，每格对应一件文物，未收剪影已收全貌+背景故事（轻科普），完成度挂钩成就与少量奖励。</div></div>
+        <div class="fn-row"><div class="k">规则</div><div class="v">MVP ≥30 件可收。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">10</div><div class="fn-titles"><div class="fn-name">结算页</div><div class="fn-cat">RESULT · 局外</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">展示带回文物列表、鉴定结果、经验增量、图鉴新增高亮、本局评级（按带回总鉴赏值 1–3 星）。</div></div>
+        <div class="fn-row"><div class="k">交互</div><div class="v">文物逐件翻转鉴定动画（可跳过）；新图鉴条目弹提示；确认回大厅。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">11</div><div class="fn-titles"><div class="fn-name">角色养成</div><div class="fn-cat">PROGRESS · 局外</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">经验升级提升基础属性；职业固定技能随等级解锁；装备文物提供被动。不引入属性点与天赋树（MVP 范围外）。</div></div>
+      </div>
+    </div>
+
+    <div class="fn">
+      <div class="fn-head"><div class="fn-id">12</div><div class="fn-titles"><div class="fn-name">新手引导</div><div class="fn-cat">TUTORIAL · 首次</div></div><div class="fn-toggle">+</div></div>
+      <div class="fn-body">
+        <div class="fn-row"><div class="k">业务</div><div class="v">首次进入的极简强制引导：移动→拾取→战斗→技能→撤离，全程 ≤90s。</div></div>
+        <div class="fn-row"><div class="k">规则</div><div class="v">不可跳过但仅首次出现。</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 文物系统 ============ -->
+<section class="section" data-sec="3">
+  <div class="sec-head">
+    <div class="sec-num">— 肆 —</div>
+    <h2 class="sec-title">文物 <span class="accent">品阶与掉落</span></h2>
+    <p class="sec-desc">文物是核心搜集物与驱动源。带出后入图鉴，可装备为传家宝提供局内被动，或在藏宝阁展示。掉率权重为待确认值，首周密切看图鉴解锁速率动态调整。</p>
+  </div>
+
+  <div class="grade-table">
+    <div class="grade-row g1"><div class="grade-name">凡品</div><div class="grade-bar"><i></i></div><div class="grade-w">88% · 高</div><div class="grade-y">计图鉴 · 无词条</div></div>
+    <div class="grade-row g2"><div class="grade-name">良品</div><div class="grade-bar"><i></i></div><div class="grade-w">62% · 中高</div><div class="grade-y">计图鉴 · 1 条</div></div>
+    <div class="grade-row g3"><div class="grade-name">珍品</div><div class="grade-bar"><i></i></div><div class="grade-w">38% · 中</div><div class="grade-y">计图鉴 · 1–2 条</div></div>
+    <div class="grade-row g4"><div class="grade-name">稀世</div><div class="grade-bar"><i></i></div><div class="grade-w">18% · 低</div><div class="grade-y">计图鉴 · 2 条</div></div>
+    <div class="grade-row g5"><div class="grade-name">传说</div><div class="grade-bar"><i></i></div><div class="grade-w">6% · 极低</div><div class="grade-y">计图鉴 · 2–3 条</div></div>
+  </div>
+
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card">
+      <span class="card-tag">局内 · IN-RUN</span>
+      <h3 class="card-h">未鉴定形态</h3>
+      <p>文物以<span class="hl">未鉴定</span>形态入背包，占容量。考古学者消耗鉴定次数即时鉴定；其他职业带出后局后统一鉴定。已鉴定才计图鉴。</p>
+    </div>
+    <div class="card">
+      <span class="card-tag">局外 · EQUIP</span>
+      <h3 class="card-h">传家宝</h3>
+      <p>可装备 <span class="gn">1 件</span>文物为传家宝，其被动词条在局内生效。装备选择即 build，轻量但有策略。</p>
+    </div>
+    <div class="card">
+      <span class="card-tag">局外 · DISPLAY</span>
+      <h3 class="card-h">藏宝阁</h3>
+      <p>展示已收文物，纯陈列无属性。承载收藏成就感与历史故事阅读，驱动长线收集。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 数据指标 ============ -->
+<section class="section" data-sec="4">
+  <div class="sec-head">
+    <div class="sec-num">— 伍 —</div>
+    <h2 class="sec-title">数据 <span class="accent">指标看板</span></h2>
+    <p class="sec-desc">每项指标服务于一项决策。埋点不为埋而埋——每事件含玩家 ID/职业/遗迹 ID/时长/文物 ID 列表，定位漏点与平衡。</p>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric">
+      <div class="metric-cat">★ North Star</div>
+      <div class="metric-name">首日核心循环完成率</div>
+      <div class="metric-use">判定循环成立与否的 <b>go/no-go</b> 闸门</div>
+    </div>
+    <div class="metric">
+      <div class="metric-cat">过程</div>
+      <div class="metric-name">首关完成率 / 撤离成功率 / 日均局数 / 图鉴解锁率</div>
+      <div class="metric-use">定位漏点<b>在哪一段</b></div>
+    </div>
+    <div class="metric">
+      <div class="metric-cat">质量</div>
+      <div class="metric-name">次日留存 / 3 日留存 / 单局时长分布 / 撤离失败率</div>
+      <div class="metric-use">判断紧张感是否<b>过度劝退</b></div>
+    </div>
+    <div class="metric">
+      <div class="metric-cat">行为</div>
+      <div class="metric-name">技能使用分布 / 职业选择分布 / 文物拾取放弃率</div>
+      <div class="metric-use">职业与文物<b>平衡调整</b>依据</div>
+    </div>
+  </div>
+
+  <div class="tracking-note">
+    <b>埋点要求：</b>每局开始/结束、每个撤离点到达、每次鉴定、每次图鉴解锁各埋一事件，属性含玩家 ID、职业、遗迹 ID、时长、文物 ID 列表。基线与目标值待确认——MVP 上线 1 周内取首批数据定基线，再设 go/no-go 阈值。
+  </div>
+</section>
+
+<!-- ============ 风险路线 ============ -->
+<section class="section" data-sec="5">
+  <div class="sec-head">
+    <div class="sec-num">— 陆 —</div>
+    <h2 class="sec-title">风险 <span class="accent">与路线图</span></h2>
+    <p class="sec-desc">风险按概率/影响分级，缓解策略以"可观测+可热更"为主。每阶段以 MVP 验证假设是否成立为前置 gate，假设不成立则回退调整而非硬推 GA。</p>
+  </div>
+
+  <div class="risk-table">
+    <div class="risk-row">
+      <div class="risk-name">撤离惩罚劝退休闲玩家</div>
+      <div class="risk-p"><span class="pill pill-m">中</span></div>
+      <div class="risk-i"><span class="pill pill-h">高</span></div>
+      <div class="risk-fix">MVP 用<b>"仅丢未鉴定"</b>轻惩罚，观测失败率动态调</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-name">文物掉率失衡致图鉴驱动失效</div>
+      <div class="risk-p"><span class="pill pill-m">中</span></div>
+      <div class="risk-i"><span class="pill pill-m">中</span></div>
+      <div class="risk-fix">首周密切看图鉴解锁速率，<b>准备热更掉率表</b></div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-name">3 职业平衡偏差</div>
+      <div class="risk-p"><span class="pill pill-m">中</span></div>
+      <div class="risk-i"><span class="pill pill-m">中</span></div>
+      <div class="risk-fix">MVP 数据驱动调整，<b>预留职业系数配置</b></div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-name">单局长度超休闲阈值</div>
+      <div class="risk-p"><span class="pill pill-m">中</span></div>
+      <div class="risk-i"><span class="pill pill-m">中</span></div>
+      <div class="risk-fix">时长分布埋点，<b>硬上限 15 分钟</b>强制撤离</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-name">美术产能不足</div>
+      <div class="risk-p"><span class="pill pill-m">中</span></div>
+      <div class="risk-i"><span class="pill pill-h">高</span></div>
+      <div class="risk-fix">2D + 图标流，文物可<b>复用真实文物素材再创作</b></div>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:36px">
+    <div>
+      <h3 class="card-h" style="margin-bottom:6px">里程碑</h3>
+      <div class="timeline">
+        <div class="tl-item active"><div class="tl-dot"></div><div class="tl-step">M1</div><div class="tl-title">需求评审通过 → 设计评审</div><div class="tl-desc">本 PRD 评审，进入设计与数值拆解</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-step">M2</div><div class="tl-title">核心循环垂直切片</div><div class="tl-desc">1 遗迹 + 1 职业 + 搜打撤 可玩</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-step">M3</div><div class="tl-title">3 遗迹 + 3 职业内容填充</div><div class="tl-desc">30+ 文物、图鉴、轻养成</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-step">M4</div><div class="tl-title">内测 + 数值调优</div><div class="tl-desc">小范围测试，掉率/平衡/时长校准</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-step">M5</div><div class="tl-title">MVP 上线 → go/no-go</div><div class="tl-desc">取数据评审，决定是否推进 GA</div></div>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="card-h" style="margin-bottom:6px">迭代阶段</h3>
+      <div class="phases">
+        <div class="phase curr">
+          <span class="phase-curr-flag">当前</span>
+          <div class="phase-tag">MVP</div>
+          <div class="phase-name">验证循环</div>
+          <div class="phase-desc">3 遗迹 · 3 职业 · 30+ 文物 · 搜打撤闭环 · 图鉴 · 轻养成</div>
+        </div>
+        <div class="phase">
+          <div class="phase-tag">Beta</div>
+          <div class="phase-name">内容扩充</div>
+          <div class="phase-desc">8–10 遗迹 · 80+ 文物 · 事件叙事 · 首通成就 · 装备词条雏形</div>
+        </div>
+        <div class="phase">
+          <div class="phase-tag">GA</div>
+          <div class="phase-name">商业化</div>
+          <div class="phase-desc">外观/便利内购 + 广告 · 社交组队撤离 · 赛季内容</div>
+        </div>
+        <div class="phase">
+          <div class="phase-tag">Scale</div>
+          <div class="phase-name">生态扩展</div>
+          <div class="phase-desc">跨端 · UGC 遗迹编辑器 · IP 联动文物专题</div>
+        </div>
+      </div>
+      <div class="tracking-note" style="margin-top:20px">
+        <b>Gate 逻辑：</b>每阶段以"MVP 验证假设是否成立"为前置闸门。假设不成立 → 回退调整，不硬推下一阶段。
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="seal">藏</div>
+    <p>藏珍录 · MVP v0.1 · 草案 · 2026.10.09 · 本报告由 PRD 自动可视化生成</p>
+  </div>
+</footer>
+
+<script>
+// Tab 切换
+const tabs=document.querySelectorAll('.tab'),secs=document.querySelectorAll('.section');
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  const i=t.dataset.tab;
+  tabs.forEach(x=>x.classList.remove('active'));
+  secs.forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  document.querySelector(`.section[data-sec="${i}"]`).classList.add('active');
+  window.scrollTo({top:document.querySelector('.tabs').offsetTop-20,behavior:'smooth'});
+}));
+
+// 功能卡展开
+document.querySelectorAll('.fn-head').forEach(h=>{
+  h.addEventListener('click',()=>h.parentElement.classList.toggle('open'));
+});
+
+// 流程图节点高亮（按预设路径分组）
+const paths={
+  A:['A','B','C'],B:['B','C'],C:['C','D','E'],
+  D:['D','E','G','H','I'],E:['E','G','H','I'],
+  G:['G','H','I'],H:['H','I','J','K'],I:['I','J','K'],
+  J:['J','L'],K:['K','L'],L:['L','A']
+};
+const nodes=document.querySelectorAll('#flow .node');
+nodes.forEach(n=>n.addEventListener('click',()=>{
+  const id=n.dataset.id;const set=new Set(paths[id]||[id]);
+  nodes.forEach(x=>{
+    if(set.has(x.dataset.id)){x.classList.add('on');x.classList.remove('dim')}
+    else{x.classList.remove('on');x.classList.add('dim')}
+  });
+  setTimeout(()=>nodes.forEach(x=>{x.classList.remove('on','dim')}),2200);
+}));
+
+// 状态机节点点击高亮
+document.querySelectorAll('.sm-node').forEach(n=>{
+  n.addEventListener('click',()=>{
+    n.parentNode.querySelectorAll('.sm-node').forEach(x=>x.style.borderColor='');
+    n.style.borderColor='var(--gold)';
+    setTimeout(()=>n.style.borderColor='',1500);
+  });
+});
+
+// 滚动 reveal
+const io=new IntersectionObserver((es)=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity=1;e.target.style.transform='none';io.unobserve(e.target)}});
+},{threshold:.08});
+document.querySelectorAll('.card,.node,.fn,.metric,.phase,.tl-item,.grade-row,.risk-row').forEach((el,i)=>{
+  el.style.opacity=0;el.style.transform='translateY(18px)';el.style.transition=`opacity .6s ${i%6*0.05}s ease, transform .6s ${i%6*0.05}s ease`;
+  io.observe(el);
+});
+</script>
+</body>
+</html>

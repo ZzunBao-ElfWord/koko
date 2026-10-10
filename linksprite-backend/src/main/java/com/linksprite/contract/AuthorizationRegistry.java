@@ -98,4 +98,9 @@ public class AuthorizationRegistry extends BaseContract {
     public BigInteger contractToAuthId(String contractNo) {
         return resultUint(call("contractToAuthId", Collections.singletonList(contractNo)), 0);
     }
+
+    /** 授权ID计数（下一可用 authId；列表遍历上界） */
+    public BigInteger nextAuthId() {
+        return resultUint(call("nextAuthId", Collections.emptyList()), 0);
+    }
 }

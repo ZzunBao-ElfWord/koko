@@ -26,6 +26,8 @@ type Config struct {
 	LiveKitURL        string
 	LiveKitAPIKey     string
 	LiveKitAPISecret  string
+	LinkSpriteBaseURL string
+	LinkSpriteAPIKey  string
 	AllowedIPs        map[string]bool // 登录 IP 白名单；空 = 不限制
 	CORSOrigins       []string
 	BootstrapUsername string
@@ -83,6 +85,8 @@ func Load() *Config {
 		LiveKitURL:        env("LIVEKIT_URL", "http://livekit:7880"),
 		LiveKitAPIKey:     os.Getenv("LIVEKIT_API_KEY"),
 		LiveKitAPISecret:  os.Getenv("LIVEKIT_API_SECRET"),
+		LinkSpriteBaseURL: env("LINKSPRITE_BASE_URL", "http://linksprite-backend:8080/api"),
+		LinkSpriteAPIKey:  os.Getenv("LINKSPRITE_API_KEY"),
 		AllowedIPs:        allowedIPs,
 		CORSOrigins:       origins,
 		BootstrapUsername: os.Getenv("BOOTSTRAP_ADMIN_USERNAME"),

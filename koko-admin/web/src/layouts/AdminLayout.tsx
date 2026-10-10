@@ -46,6 +46,9 @@ export default function AdminLayout() {
 
   const visibleItems = menuItems.filter((item) => item.roles.includes(me.role));
 
+  // 侧边栏分组渲染：group 字段变化时插入一行分组标题
+  let prevGroup: string | undefined;
+
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <aside className="flex w-60 shrink-0 flex-col border-r border-gray-200 bg-white">
@@ -54,23 +57,33 @@ export default function AdminLayout() {
           <span className="text-sm font-medium text-gray-500">管理后台</span>
         </div>
         <nav className="flex-1 space-y-0.5 px-3 py-2">
-          {visibleItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end={item.path === '/'}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-indigo-50 text-indigo-700'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                }`
-              }
-            >
-              <span className="text-base leading-none">{item.glyph}</span>
-              {item.label}
-            </NavLink>
-          ))}
+          {visibleItems.map((item) => {
+            const showGroup = item.group && item.group !== prevGroup;
+            prevGroup = item.group;
+            return (
+              <div key={item.path}>
+                {showGroup ? (
+                  <div className="px-3 pb-1 pt-4 text-[11px] font-semibold tracking-wide text-gray-400">
+                    {item.group}
+                  </div>
+                ) : null}
+                <NavLink
+                  to={item.path}
+                  end={item.path === '/'}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                      isActive
+                        ? 'bg-indigo-50 text-indigo-700'
+                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    }`
+                  }
+                >
+                  <span className="text-base leading-none">{item.glyph}</span>
+                  {item.label}
+                </NavLink>
+              </div>
+            );
+          })}
         </nav>
         <div className="border-t border-gray-200 px-5 py-4">
           <div className="text-sm font-medium text-gray-900">{me.username}</div>

@@ -61,6 +61,7 @@ func main() {
 		Mongo:   client,
 		Delta:   delta.New(cfg.DeltaBaseURL, cfg.DeltaAdminToken, cfg.DeltaTokenHeader),
 		Autumn:  delta.New(cfg.AutumnBaseURL, cfg.DeltaAdminToken, cfg.DeltaTokenHeader),
+		LinkSprite: delta.New(cfg.LinkSpriteBaseURL, cfg.LinkSpriteAPIKey, "X-API-Key"),
 		Minio:   connectMinio(cfg, log),
 		LiveKit: lk,
 	}

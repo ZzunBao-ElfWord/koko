@@ -1,0 +1,10 @@
+# IDE
+.trae/
+
+# 构建产物
+node_modules/
+dist/
+linksprite-backend/target/
+
+# 研究产出（非代码）
+work/

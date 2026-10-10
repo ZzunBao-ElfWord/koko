@@ -532,3 +532,76 @@ export function deleteVoiceRoom(room: string) {
 export function kickVoiceParticipant(room: string, identity: string) {
   return api.delete(`/voice/rooms/${encodeURIComponent(room)}/participants/${encodeURIComponent(identity)}`);
 }
+
+// ===== 连接精灵链（NFT 融合） =====
+
+// linksprite-backend /api/health 返回的服务与链状态
+export interface ChainHealth {
+  service: string;
+  status: string;
+  chainEnabled: boolean;
+  chainConnected: boolean;
+  chainId: string;
+  groupId: string;
+  blockNumber: number;
+}
+
+// 链服务统一返回结构（Result<T>）
+export interface ChainResult<T = unknown> {
+  code: number;
+  message: string;
+  data: T;
+}
+
+// 链上写操作返回的交易凭据
+export interface ChainTx {
+  txHash?: string;
+  blockNumber?: string;
+  status?: string;
+  message?: string;
+}
+
+// 统一走 BFF 透传代理 /api/v1/chain/<rest>（GET 查询 moderator+；写操作仅 super_admin，BFF 强制）
+// params 拼到 query string；Spring @RequestParam 与 @PathVariable 均可直接命中
+export const chainApi = {
+  async get<T = unknown>(path: string, params?: Record<string, string | number>): Promise<ChainResult<T>> {
+    const { data } = await api.get<ChainResult<T>>(`/chain/${path}`, { params });
+    return data;
+  },
+  async post(
+    path: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean>,
+  ): Promise<ChainResult> {
+    const { data } = await api.post<ChainResult>(`/chain/${path}`, body ?? {}, { params });
+    return data;
+  },
+};
+
+// ===== B 端合作申请（BFF 原生，非链代理） =====
+
+export type B2bStatus = 'pending' | 'contacted' | 'signed' | 'active' | 'rejected';
+
+export interface B2bApplication {
+  id: string;
+  company: string;
+  contact: string;
+  phone: string;
+  ip_type: string;
+  work_desc: string;
+  expected_volume?: number;
+  status: B2bStatus;
+  created_at: string;
+  updated_at?: string;
+  handled_by?: string;
+}
+
+export async function fetchB2bApplications(): Promise<{ items: B2bApplication[] }> {
+  const { data } = await api.get<{ items: B2bApplication[] }>('/b2b/applications');
+  return data;
+}
+
+export async function updateB2bApplicationStatus(id: string, status: B2bStatus) {
+  const { data } = await api.patch(`/b2b/applications/${id}`, { status });
+  return data;
+}

@@ -1,0 +1,27 @@
+# 连接精灵链后端 — 服务器编排（部署目录 /opt/linksprite）
+# 网络与 Caddy（stoat_default）互通，Caddy 反代块: nft.kokokongkong.com -> linksprite-backend:8080
+services:
+  linksprite-backend:
+    build: .
+    container_name: linksprite-backend
+    restart: unless-stopped
+    mem_limit: 512m
+    environment:
+      # dev profile（fisco.enabled=false）：无需 MySQL/Redis/链节点即可运行
+      # API-Key：服务器 .env 中配置 LINKSPRITE_API_KEY；为空则不校验
+      - LINKSPRITE_API_KEY=${LINKSPRITE_API_KEY:-}
+    volumes:
+      # 国密证书，当前开发模式不加载；建链启用时无需重传
+      - ./cert:/app/cert:ro
+    networks:
+      - stoat_default
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/api/health >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+networks:
+  stoat_default:
+    external: true

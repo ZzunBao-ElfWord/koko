@@ -83,9 +83,16 @@ class CtaSection extends StatelessWidget {
                   _CtaButton(
                     label: 'Windows 下载',
                     icon: '🪟',
-                    onTap: () => openSitePath('/download/KOKO_Setup.exe'),
+                    onTap: () => openSitePath('/download/KOKO_Setup_1.1.4.zip'),
                   ),
                 ],
+              ),
+              const SizedBox(height: 18),
+              Text(
+                'Windows 版为 zip 压缩包：下载后解压运行 KOKO_Setup_1.1.4.exe；'
+                '若系统提示「已保护你的电脑」，点击「更多信息 → 仍要运行」即可。',
+                textAlign: TextAlign.center,
+                style: AppText.base(13, color: AppColors.textSecondary),
               ),
             ],
           ),

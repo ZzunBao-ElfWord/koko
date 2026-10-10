@@ -21,6 +21,8 @@ type Deps struct {
 	Autumn  *delta.Client   // 复用 delta.Client 的"服务端持有会话头"转发能力访问文件服务
 	Minio   *minio.Client   // 附件对象删除（Autumn v0.15.5 无删除接口）；未配置时为 nil
 	LiveKit *livekit.Client // 语音房管理；未配置凭据时为 nil
+	// LinkSprite 复用 delta.Client 的"服务端持钥转发"能力访问连接精灵链后端（X-API-Key）
+	LinkSprite *delta.Client
 }
 
 // RevoltCol 业务库集合（账号权限：find 全部；update 仅 users/safety_reports）。

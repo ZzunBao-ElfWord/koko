@@ -53,6 +53,14 @@ public class AuthorizationController {
     }
 
     /**
+     * 全量授权列表（管理端授权列表页数据源）
+     */
+    @GetMapping("/list")
+    public Result<java.util.List<java.util.Map<String, Object>>> list() {
+        return Result.success(authorizationService.listAll());
+    }
+
+    /**
      * 查询授权详情
      */
     @GetMapping("/{authId}")

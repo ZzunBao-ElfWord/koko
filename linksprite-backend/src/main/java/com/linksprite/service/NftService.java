@@ -30,12 +30,17 @@ public class NftService extends BaseService {
     private KycService kycService;
 
     /**
-     * B端铸造NFT
+     * B端铸造NFT（绑定授权）
+     * tokenId 为 null 时自动分配（totalSupply+1，链上无销毁，自增安全）
      */
     public ChainTxResult mintB2B(
             String to, BigInteger tokenId, String tokenURI,
             BigInteger authId, String ipfsHash, String workHash) {
         requireChain(chainStatus);
+        if (tokenId == null) {
+            tokenId = linkSpriteNFT.totalSupply().add(BigInteger.ONE);
+            log.info("tokenId 未指定，自动分配: {}", tokenId);
+        }
         log.info("B2B铸造NFT: tokenId={}, authId={}, to={}", tokenId, authId, to);
 
         if (!authorizationService.isValid(authId)) {

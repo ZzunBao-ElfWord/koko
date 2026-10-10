@@ -15,7 +15,7 @@ public class MintB2BRequest {
     @NotBlank(message = "接收地址不能为空")
     private String to;
 
-    @NotNull(message = "tokenId不能为空")
+    /** 留空则由服务端自动分配（totalSupply+1） */
     private BigInteger tokenId;
 
     @NotBlank(message = "tokenURI不能为空")
