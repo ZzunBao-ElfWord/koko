@@ -3,808 +3,816 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KOKO空空 - 元宇宙陪伴平台 | 虚空有灵，陪伴有声</title>
-<meta name="description" content="KOKO空空是你的元宇宙陪伴平台。电竞陪玩、元宇宙礼物开放平台、虚拟社交，海量认证陪玩随时组队，IP入驻链上确权礼物独一无二。虚空有灵，陪伴有声。">
+<title>KOKO空空 — 人工智能元宇宙时代生活新范式</title>
+<meta name="description" content="KOKO空空是人工智能元宇宙时代的生活新范式：AI 原生陪伴、元宇宙虚拟社交、干净纯粹的社区空间、元宇宙礼物、电竞陪玩与语音空间。虚空有灵，陪伴有声。">
+<meta name="keywords" content="KOKO空空,人工智能,元宇宙,生活新范式,AI陪伴,虚拟社交,社交空间,兴趣社区,元宇宙礼物,电竞陪玩,语音空间">
 <link rel="icon" type="image/jpeg" href="KOKO-logo.jpg">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --deep-blue: #0a0906;
-    --space-blue: #121008;
-    --nebula-purple: #ffc107;
-    --neon-cyan: #ffd54f;
-    --magic-pink: #ff8f00;
-    --text-primary: #f7f2e4;
-    --text-secondary: #b8ae98;
-    --text-muted: #7d7460;
-    --gradient-main: linear-gradient(135deg, #ffd54f 0%, #ffc107 50%, #ff8f00 100%);
-    --gradient-text: linear-gradient(135deg, #ffd54f, #ff8f00);
-    --glass-bg: rgba(30, 24, 8, 0.4);
-    --glass-border: rgba(255, 193, 7, 0.25);
+    --black: #0a0a08;
+    --black-2: #111009;
+    --panel: #14130c;
+    --yellow: #ffcc00;
+    --yellow-2: #ffd84d;
+    --amber: #ff9d00;
+    --text: #f5f0e1;
+    --text-2: #b3ac97;
+    --text-3: #7a745f;
+    --line: rgba(255, 204, 0, 0.16);
+    --line-soft: rgba(255, 204, 0, 0.08);
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   }
   html { scroll-behavior: smooth; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: var(--deep-blue);
-    color: var(--text-primary);
-    line-height: 1.7;
+    font-family: var(--sans);
+    background: var(--black);
+    color: var(--text);
+    line-height: 1.75;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
+  ::selection { background: var(--yellow); color: #000; }
 
-  .stars-bg {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: 0;
-    background:
-      radial-gradient(ellipse at 20% 20%, rgba(255,193,7,0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(255,143,0,0.1) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(255,213,79,0.05) 0%, transparent 60%);
-  }
-  .stars-bg::before {
-    content: ''; position: absolute; inset: 0;
+  /* ===== 全局质感层：网格 + 颗粒 + 顶部光晕 ===== */
+  .bg-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .bg-grid {
     background-image:
-      radial-gradient(1px 1px at 20px 30px, #fff, transparent),
-      radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
-      radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-      radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-      radial-gradient(1px 1px at 160px 120px, #fff, transparent),
-      radial-gradient(2px 2px at 200px 50px, rgba(255,213,79,0.5), transparent),
-      radial-gradient(1px 1px at 250px 100px, rgba(255,143,0,0.4), transparent),
-      radial-gradient(1px 1px at 300px 150px, rgba(255,255,255,0.7), transparent),
-      radial-gradient(1px 1px at 350px 30px, #fff, transparent);
-    background-size: 400px 300px;
-    animation: twinkle 6s ease-in-out infinite;
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 100%);
   }
-  @keyframes twinkle { 0%,100%{opacity:0.4} 50%{opacity:0.9} }
+  .bg-grain {
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .bg-glow {
+    background:
+      radial-gradient(ellipse 60% 40% at 50% -5%, rgba(255,204,0,0.13), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 85% 25%, rgba(255,157,0,0.05), transparent 70%);
+  }
 
-  /* 导航栏 */
-  .navbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    padding: 16px 0;
-    background: rgba(10, 9, 6, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 193, 7, 0.15);
-    transition: all 0.3s ease;
+  /* ===== 工具类 ===== */
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+  .mono { font-family: var(--mono); }
+  .chip {
+    display: inline-block; padding: 3px 10px;
+    background: var(--yellow); color: #000;
+    font-weight: 900; font-size: 0.92em;
+    letter-spacing: 0.08em;
   }
-  .navbar.scrolled {
-    padding: 12px 0;
-    background: rgba(10, 9, 6, 0.92);
-    box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  .kbd {
+    font-family: var(--mono); font-size: 12px; color: var(--yellow);
+    border: 1px solid var(--line); padding: 4px 10px; letter-spacing: 0.14em;
   }
-  .nav-container {
-    max-width: 1200px; margin: 0 auto; padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between;
+  section { padding: 110px 0; position: relative; z-index: 1; }
+
+  /* 十字标记 */
+  .cross { position: relative; }
+  .cross::before, .cross::after {
+    content: ''; position: absolute; background: var(--line); z-index: 2;
   }
-  .nav-logo {
-    display: flex; align-items: center; gap: 12px;
-    text-decoration: none; color: #fff;
+  .cross::before { width: 17px; height: 1px; top: 0; left: -8px; }
+  .cross::after  { width: 1px; height: 17px; top: -8px; left: 0; }
+
+  /* 区块头 */
+  .sec-head { margin-bottom: 64px; }
+  .sec-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.28em;
+    color: var(--yellow); margin-bottom: 22px;
   }
-  .nav-logo img {
-    height: 40px; width: auto; border-radius: 8px;
-    box-shadow: 0 0 20px rgba(255,193,7,0.45);
+  .sec-tag::before { content: ''; width: 34px; height: 1px; background: var(--yellow); }
+  .sec-head h2 {
+    font-size: clamp(30px, 4.4vw, 52px); font-weight: 900;
+    line-height: 1.22; letter-spacing: 0.01em;
   }
-  .nav-logo span {
-    font-size: 20px; font-weight: 800; letter-spacing: 3px;
-    background: var(--gradient-text);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .sec-head .sub {
+    margin-top: 18px; color: var(--text-2); font-size: 16.5px; max-width: 660px;
   }
-  .nav-links {
-    display: flex; align-items: center; gap: 32px;
-    list-style: none;
+
+  /* 渐入 */
+  .rv { opacity: 0; transform: translateY(34px); transition: opacity .85s cubic-bezier(.16,1,.3,1), transform .85s cubic-bezier(.16,1,.3,1); }
+  .rv.in { opacity: 1; transform: none; }
+
+  /* ===== 导航 ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    border-bottom: 1px solid transparent;
+    transition: background .35s, border-color .35s;
   }
+  .nav.scrolled {
+    background: rgba(10,10,8,0.82);
+    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    border-bottom-color: var(--line);
+  }
+  .nav-in {
+    max-width: 1240px; margin: 0 auto; padding: 18px 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
+  .logo img { height: 38px; border-radius: 9px; }
+  .logo b { font-size: 19px; font-weight: 900; letter-spacing: 0.22em; }
+  .logo b i { font-style: normal; color: var(--yellow); }
+  .nav-links { display: flex; align-items: center; gap: 30px; list-style: none; }
   .nav-links a {
-    color: var(--text-secondary); text-decoration: none;
-    font-size: 15px; font-weight: 500;
-    transition: color 0.3s; position: relative;
+    color: var(--text-2); text-decoration: none; font-size: 14.5px; font-weight: 500;
+    transition: color .25s; position: relative; padding: 4px 0;
   }
-  .nav-links a:hover { color: var(--neon-cyan); }
-  .nav-links a::after {
-    content: ''; position: absolute; bottom: -4px; left: 0;
-    width: 0; height: 2px; background: var(--gradient-main);
-    transition: width 0.3s;
+  .nav-links a::before {
+    content: counter(nav, decimal-leading-zero) ' ';
+    counter-increment: nav; font-family: var(--mono); font-size: 10px; color: var(--text-3);
   }
-  .nav-links a:hover::after { width: 100%; }
-  .nav-download {
-    padding: 10px 24px; border-radius: 24px;
-    background: var(--gradient-main);
-    color: #fff !important; font-weight: 600;
-    box-shadow: 0 4px 20px rgba(255,193,7,0.4);
-    transition: all 0.3s;
+  .nav-links { counter-reset: nav; }
+  .nav-links a:hover { color: var(--yellow); }
+  .nav-cta {
+    padding: 10px 22px; background: var(--yellow); color: #000 !important;
+    font-weight: 800; text-decoration: none; font-size: 14px;
+    letter-spacing: 0.04em; transition: transform .25s, box-shadow .25s;
+    box-shadow: 0 0 0 rgba(255,204,0,0);
   }
-  .nav-download:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(255,193,7,0.6);
-  }
-  .nav-download::after { display: none; }
-  .menu-toggle {
-    display: none; background: none; border: none;
-    color: #fff; font-size: 24px; cursor: pointer;
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,204,0,0.35); }
+  .nav-cta::before { content: none; }
+  .menu-btn {
+    display: none; background: none; border: 1px solid var(--line);
+    color: var(--yellow); font-size: 19px; padding: 6px 13px; cursor: pointer;
   }
 
-  /* Hero */
+  /* ===== HERO ===== */
   .hero {
     min-height: 100vh; display: flex; align-items: center;
-    position: relative; padding: 120px 24px 80px;
-    overflow: hidden;
+    padding: 150px 0 60px; overflow: hidden;
   }
-  .hero::before {
-    content: ''; position: absolute; top: 30%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 800px; height: 800px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,193,7,0.2) 0%, rgba(255,213,79,0.08) 40%, transparent 70%);
-    filter: blur(60px); z-index: 0;
+  .hero-grid {
+    display: grid; grid-template-columns: 1.15fr 0.85fr;
+    gap: 56px; align-items: center;
   }
-  .hero-container {
-    max-width: 1200px; margin: 0 auto;
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 60px; align-items: center; position: relative; z-index: 1;
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.24em;
+    color: var(--yellow); margin-bottom: 28px;
+    border: 1px solid var(--line); padding: 8px 16px;
   }
-  .hero-content h1 {
-    font-size: clamp(36px, 5.5vw, 64px); font-weight: 900;
-    line-height: 1.2; margin-bottom: 20px; letter-spacing: 2px;
+  .hero-tag .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--yellow);
+    animation: pulse 1.8s infinite;
   }
-  .hero-content h1 .gradient {
-    background: var(--gradient-text);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
+  @keyframes pulse { 0%,100%{opacity:1; box-shadow:0 0 0 0 rgba(255,204,0,.5)} 50%{opacity:.55; box-shadow:0 0 0 6px rgba(255,204,0,0)} }
+  .hero h1 {
+    font-size: clamp(30px, 8.4vw, 68px); font-weight: 900;
+    line-height: 1.16; letter-spacing: 0.01em; margin-bottom: 26px;
   }
-  .hero-content .subtitle {
-    font-size: clamp(16px, 2vw, 20px); color: var(--text-secondary);
-    margin-bottom: 12px; letter-spacing: 1px;
+  .hero h1 .hl {
+    background: var(--yellow); color: #000; padding: 0 14px;
+    display: inline-block; margin-top: 8px;
+    box-shadow: 8px 8px 0 rgba(255,204,0,0.22);
   }
-  .hero-content .slogan {
-    font-size: clamp(18px, 2.2vw, 24px); color: var(--neon-cyan);
-    font-weight: 300; letter-spacing: 6px; margin-bottom: 40px;
-    text-shadow: 0 0 30px rgba(255,213,79,0.4);
+  .hero-slogan {
+    font-family: var(--mono); color: var(--text-2); letter-spacing: 0.42em;
+    font-size: clamp(13px, 1.4vw, 16px); margin-bottom: 30px;
   }
-  .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+  .hero-slogan b { color: var(--yellow); font-weight: 400; }
+  .hero-desc { color: var(--text-2); font-size: clamp(15.5px, 1.5vw, 18px); max-width: 560px; margin-bottom: 40px; }
+  .hero-desc b { color: var(--text); font-weight: 700; }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 52px; }
   .btn {
     display: inline-flex; align-items: center; gap: 10px;
-    padding: 16px 32px; border-radius: 30px;
-    font-size: 16px; font-weight: 600;
-    text-decoration: none; cursor: pointer;
-    transition: all 0.3s; border: none;
+    padding: 15px 32px; font-size: 15.5px; font-weight: 800;
+    text-decoration: none; letter-spacing: 0.03em; cursor: pointer;
+    transition: transform .25s, box-shadow .25s, background .25s, border-color .25s, color .25s;
+    border: 1px solid transparent;
   }
-  .btn-primary {
-    background: var(--gradient-main); color: #fff;
-    box-shadow: 0 8px 30px rgba(255,193,7,0.5);
-  }
-  .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(255,193,7,0.7);
-  }
-  .btn-secondary {
-    background: var(--glass-bg); color: #fff;
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-  }
-  .btn-secondary:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 8px 30px rgba(255,213,79,0.2);
-  }
-  .btn-icon { font-size: 20px; }
+  .btn-y { background: var(--yellow); color: #000; box-shadow: 0 10px 34px rgba(255,204,0,0.28); }
+  .btn-y:hover { transform: translateY(-3px); box-shadow: 0 16px 44px rgba(255,204,0,0.42); }
+  .btn-ghost { border-color: rgba(255,204,0,0.35); color: var(--text); background: rgba(255,204,0,0.04); }
+  .btn-ghost:hover { border-color: var(--yellow); color: var(--yellow); transform: translateY(-3px); }
+  .btn[disabled] { opacity: .45; cursor: not-allowed; filter: grayscale(0.4); }
+  .btn[disabled]:hover { transform: none; box-shadow: none; }
+  #toast { position: fixed; left: 50%; bottom: 36px; transform: translateX(-50%) translateY(16px); max-width: 92vw; padding: 12px 22px; background: rgba(10,9,6,.92); border: 1px solid rgba(255,204,0,.5); color: #ffcc00; font-size: 14px; text-align: center; border-radius: 24px; opacity: 0; pointer-events: none; transition: all .3s; z-index: 9999; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  .hero-visual {
-    display: flex; justify-content: center; align-items: center;
-    position: relative;
+  .hero-stats {
+    display: flex; gap: 0; border: 1px solid var(--line);
+    width: fit-content; background: rgba(255,204,0,0.03);
   }
-  .hero-icon-wrap {
-    position: relative;
-    animation: float 5s ease-in-out infinite;
-  }
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
-  .hero-icon-wrap::before {
-    content: ''; position: absolute; inset: -30px;
-    border-radius: 50%;
-    background: var(--gradient-main);
-    filter: blur(50px); opacity: 0.4;
-    z-index: -1;
-  }
-  .hero-icon {
-    width: clamp(260px, 32vw, 420px);
-    height: auto;
-    border-radius: 16px;
-    box-shadow:
-      0 0 60px rgba(255,193,7,0.45),
-      0 0 120px rgba(255,193,7,0.2),
-      0 30px 80px rgba(0,0,0,0.5);
-  }
-  .hero-badge {
-    position: absolute; padding: 10px 20px;
-    background: var(--glass-bg); backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border); border-radius: 20px;
-    font-size: 14px; color: var(--text-primary);
-    white-space: nowrap;
-  }
-  .hero-badge.b1 { top: 10%; left: -10%; animation: float 4s ease-in-out infinite 0.5s; }
-  .hero-badge.b2 { bottom: 15%; right: -8%; animation: float 4.5s ease-in-out infinite 1s; }
-  .hero-badge.b3 { top: 50%; right: -15%; animation: float 5s ease-in-out infinite 1.5s; }
+  .hstat { padding: 16px 28px; border-right: 1px solid var(--line); }
+  .hstat:last-child { border-right: 0; }
+  .hstat b { display: block; font-size: 22px; font-weight: 900; color: var(--yellow); font-family: var(--mono); }
+  .hstat span { font-size: 12px; color: var(--text-3); letter-spacing: 0.12em; }
 
-  /* 通用区块 */
-  section { padding: 100px 24px; position: relative; z-index: 1; }
-  .section-container { max-width: 1200px; margin: 0 auto; }
-  .section-header { text-align: center; margin-bottom: 60px; }
-  .section-tag {
-    display: inline-block; padding: 6px 20px; border-radius: 20px;
-    background: rgba(255,193,7,0.12); border: 1px solid rgba(255,193,7,0.35);
-    color: var(--neon-cyan); font-size: 13px; letter-spacing: 3px;
-    margin-bottom: 20px;
+  /* HERO 视觉：HUD 徽标台 */
+  .hero-visual { position: relative; display: flex; justify-content: center; }
+  .hud {
+    position: relative; padding: 46px;
+    border: 1px solid var(--line);
+    background: linear-gradient(160deg, rgba(255,204,0,0.05), rgba(255,204,0,0.01) 55%);
   }
-  .section-title {
-    font-size: clamp(28px, 4vw, 44px); font-weight: 800; margin-bottom: 16px;
+  .hud::before, .hud::after,
+  .hud .c3, .hud .c4 {
+    content: ''; position: absolute; width: 22px; height: 22px;
+    border-color: var(--yellow); border-style: solid; border-width: 0;
   }
-  .section-title .gradient {
-    background: var(--gradient-text);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .hud::before { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
+  .hud::after  { top: -1px; right: -1px; border-top-width: 2px; border-right-width: 2px; }
+  .hud .c3 { bottom: -1px; left: -1px; border-bottom-width: 2px; border-left-width: 2px; }
+  .hud .c4 { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
+  .hud-label {
+    position: absolute; top: 12px; left: 16px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text-3);
   }
-  .section-desc {
-    color: var(--text-secondary); font-size: 17px;
-    max-width: 640px; margin: 0 auto;
+  .hud-label.rt { left: auto; right: 16px; color: var(--yellow); }
+  .hud img {
+    width: clamp(240px, 24vw, 340px); display: block; border-radius: 14px;
+    box-shadow: 0 0 0 1px rgba(255,204,0,0.25), 0 24px 80px rgba(255,204,0,0.16), 0 40px 90px rgba(0,0,0,0.6);
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+  .orbit-badge {
+    position: absolute; display: flex; align-items: center; gap: 9px;
+    background: rgba(17,16,9,0.92); border: 1px solid var(--line);
+    padding: 10px 16px; font-size: 13px; font-weight: 600; white-space: nowrap;
+    backdrop-filter: blur(8px);
+  }
+  .orbit-badge em { font-style: normal; font-family: var(--mono); font-size: 11px; color: var(--yellow); }
+  .ob1 { top: 4%; left: -8%; animation: float 5s ease-in-out infinite 0.4s; }
+  .ob2 { bottom: 22%; right: -9%; animation: float 5.6s ease-in-out infinite 0.9s; }
+  .ob3 { bottom: -4%; left: -5%; animation: float 6.2s ease-in-out infinite 1.4s; }
+  .hero-coord {
+    position: absolute; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.18em; color: var(--text-3);
+  }
+  .hero-coord.l { top: 46%; left: -60px; writing-mode: vertical-rl; }
+  .hero-coord.r { bottom: 8%; right: -66px; writing-mode: vertical-rl; }
+
+  /* 宽屏两栏：缩小 H1 保证「人工智能元宇宙时代」单行不折字 */
+  @media (min-width: 1081px) {
+    .hero h1 { font-size: clamp(48px, 5vw, 68px); }
   }
 
-  /* 功能卡片 */
-  .feature-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 28px;
+  /* ===== 跑马灯 ===== */
+  .ticker {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    background: rgba(255,204,0,0.035); overflow: hidden; position: relative; z-index: 1;
+    padding: 15px 0;
   }
-  .feature-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px; padding: 40px 32px;
-    backdrop-filter: blur(10px);
-    transition: all 0.4s ease;
-    position: relative; overflow: hidden;
+  .ticker-track {
+    display: flex; gap: 0; width: max-content;
+    animation: marquee 30s linear infinite;
   }
-  .feature-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: var(--gradient-main); opacity: 0;
-    transition: opacity 0.4s;
+  .ticker:hover .ticker-track { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  .ticker span {
+    font-family: var(--mono); font-size: 13.5px; letter-spacing: 0.22em;
+    color: var(--text-2); padding: 0 26px; white-space: nowrap;
   }
-  .feature-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(255,213,79,0.4);
-    box-shadow: 0 20px 60px rgba(255,193,7,0.3);
-  }
-  .feature-card:hover::before { opacity: 1; }
-  .feature-icon {
-    width: 64px; height: 64px; border-radius: 16px;
-    background: var(--gradient-main);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 30px; margin-bottom: 24px;
-    box-shadow: 0 8px 24px rgba(255,193,7,0.4);
-  }
-  .feature-card h3 {
-    font-size: 22px; margin-bottom: 14px; color: #fff;
-  }
-  .feature-card p {
-    color: var(--text-secondary); font-size: 15px; line-height: 1.8;
-  }
+  .ticker span i { font-style: normal; color: var(--yellow); padding-right: 52px; }
 
-  /* 业务详情区 */
-  .business-section {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 60px; align-items: center; margin-bottom: 80px;
+  /* ===== 三大范式 ===== */
+  .para-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .para-card {
+    position: relative; padding: 42px 34px 38px;
+    border: 1px solid var(--line); background: var(--panel);
+    transition: transform .4s cubic-bezier(.16,1,.3,1), border-color .4s, box-shadow .4s;
+    overflow: hidden;
   }
-  .business-section.reverse { direction: rtl; }
-  .business-section.reverse > * { direction: ltr; }
-  .business-image {
-    border-radius: 20px; overflow: hidden;
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-  }
-  .business-image img { width: 100%; display: block; }
-  .business-content .tag {
-    display: inline-block; padding: 6px 16px; border-radius: 16px;
-    font-size: 13px; font-weight: 600; letter-spacing: 1px;
-    margin-bottom: 20px;
-  }
-  .business-content .tag.cyan {
-    background: rgba(255,213,79,0.1); color: var(--neon-cyan);
-    border: 1px solid rgba(255,213,79,0.3);
-  }
-  .business-content .tag.pink {
-    background: rgba(255,143,0,0.1); color: var(--magic-pink);
-    border: 1px solid rgba(255,143,0,0.3);
-  }
-  .business-content h3 {
-    font-size: clamp(24px, 3vw, 36px); font-weight: 800;
-    margin-bottom: 20px; color: #fff;
-  }
-  .business-content > p {
-    color: var(--text-secondary); font-size: 16px;
-    margin-bottom: 24px; line-height: 1.9;
-  }
-  .business-points { list-style: none; margin-bottom: 28px; }
-  .business-points li {
-    display: flex; align-items: flex-start; gap: 12px;
-    margin-bottom: 14px; color: var(--text-secondary); font-size: 15px;
-  }
-  .business-points li::before {
-    content: '✦'; color: var(--neon-cyan);
-    font-size: 14px; flex-shrink: 0; margin-top: 2px;
-  }
-  .business-cta { display: flex; gap: 14px; flex-wrap: wrap; }
-  .btn-small {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 24px; border-radius: 24px;
-    font-size: 14px; font-weight: 600;
-    text-decoration: none; cursor: pointer;
-    transition: all 0.3s; border: none;
-  }
-  .btn-small.primary {
-    background: var(--gradient-main); color: #fff;
-    box-shadow: 0 4px 16px rgba(255,193,7,0.4);
-  }
-  .btn-small.primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255,193,7,0.6);
-  }
-  .btn-small.outline {
-    background: transparent; color: var(--neon-cyan);
-    border: 1px solid rgba(255,213,79,0.4);
-  }
-  .btn-small.outline:hover {
-    background: rgba(255,213,79,0.1);
-    border-color: var(--neon-cyan);
-  }
-
-  /* 合作入驻专区 */
-  .partner-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-  }
-  .partner-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px; padding: 36px 28px;
-    backdrop-filter: blur(10px);
-    transition: all 0.4s ease;
-    text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .partner-card::before {
+  .para-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: var(--gradient-main);
+    background: var(--yellow); transform: scaleX(0); transform-origin: left;
+    transition: transform .5s cubic-bezier(.16,1,.3,1);
   }
-  .partner-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(255,143,0,0.4);
-    box-shadow: 0 20px 50px rgba(255,193,7,0.3);
+  .para-card:hover { transform: translateY(-8px); border-color: rgba(255,204,0,0.4); box-shadow: 0 26px 70px rgba(255,204,0,0.1); }
+  .para-card:hover::before { transform: scaleX(1); }
+  .para-num {
+    font-family: var(--mono); font-size: 64px; font-weight: 700;
+    color: transparent; -webkit-text-stroke: 1px rgba(255,204,0,0.4);
+    line-height: 1; margin-bottom: 22px;
   }
-  .partner-icon {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: var(--gradient-main);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 32px; margin: 0 auto 20px;
-    box-shadow: 0 8px 24px rgba(255,193,7,0.5);
+  .para-cat {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.3em;
+    color: var(--yellow); margin-bottom: 10px;
   }
-  .partner-card h4 {
-    font-size: 20px; color: #fff; margin-bottom: 10px;
+  .para-card h3 { font-size: 24px; font-weight: 900; margin-bottom: 14px; }
+  .para-card h3 span { color: var(--yellow); }
+  .para-card p { color: var(--text-2); font-size: 15px; margin-bottom: 22px; }
+  .para-card ul { list-style: none; }
+  .para-card li {
+    font-size: 13.5px; color: var(--text-2); padding: 9px 0;
+    border-top: 1px dashed rgba(255,204,0,0.14);
+    display: flex; align-items: baseline; gap: 10px;
   }
-  .partner-card p {
-    color: var(--text-secondary); font-size: 14px;
-    line-height: 1.7; margin-bottom: 20px;
-  }
-  .partner-card .btn-small {
-    width: 100%; justify-content: center;
-  }
+  .para-card li::before { content: '+'; color: var(--yellow); font-family: var(--mono); flex-shrink: 0; }
 
-  /* 价值区 */
-  .value-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
+  /* ===== 分栏特性区（AI / 空间 / 陪玩）===== */
+  .split {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 64px; align-items: center;
   }
-  .value-card {
-    text-align: center; padding: 36px 24px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    transition: all 0.3s;
+  .split.flip .split-media { order: 2; }
+  .split-kicker {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.26em;
+    color: var(--yellow); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
   }
-  .value-card:hover {
-    border-color: rgba(255,143,0,0.4);
-    transform: translateY(-4px);
+  .split-kicker::before { content: ''; width: 30px; height: 1px; background: var(--yellow); }
+  .split h3 { font-size: clamp(26px, 3.2vw, 40px); font-weight: 900; line-height: 1.3; margin-bottom: 20px; }
+  .split h3 .chip { box-shadow: 5px 5px 0 rgba(255,204,0,0.2); }
+  .split .lead { color: var(--text-2); font-size: 16px; margin-bottom: 28px; }
+  .split .lead b { color: var(--text); }
+  .pt-list { list-style: none; margin-bottom: 32px; }
+  .pt-list li {
+    display: flex; gap: 14px; padding: 13px 0;
+    border-top: 1px solid var(--line-soft); font-size: 15px; color: var(--text-2);
   }
-  .value-card .icon { font-size: 36px; margin-bottom: 16px; }
-  .value-card h4 { font-size: 18px; color: #fff; margin-bottom: 10px; }
-  .value-card p { font-size: 14px; color: var(--text-secondary); }
+  .pt-list li:last-child { border-bottom: 1px solid var(--line-soft); }
+  .pt-list li em {
+    font-style: normal; font-family: var(--mono); font-size: 12px;
+    color: var(--yellow); flex-shrink: 0; margin-top: 3px;
+  }
+  .pt-list li b { color: var(--text); font-weight: 700; margin-right: 6px; }
+  .split-media { position: relative; }
+  .frame {
+    position: relative; border: 1px solid var(--line);
+    background: var(--black-2); overflow: hidden;
+  }
+  .frame::before, .frame::after,
+  .frame .c3, .frame .c4 {
+    content: ''; position: absolute; width: 18px; height: 18px;
+    border-color: var(--yellow); border-style: solid; border-width: 0; z-index: 2;
+  }
+  .frame::before { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
+  .frame::after  { top: -1px; right: -1px; border-top-width: 2px; border-right-width: 2px; }
+  .frame .c3 { bottom: -1px; left: -1px; border-bottom-width: 2px; border-left-width: 2px; }
+  .frame .c4 { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
+  .frame img { width: 100%; display: block; filter: saturate(0.92) contrast(1.04); }
+  .frame .cap {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+    padding: 12px 18px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+    color: var(--text-2); background: linear-gradient(transparent, rgba(10,10,8,0.9) 60%);
+  }
+  .frame .cap i { font-style: normal; color: var(--yellow); }
 
-  /* 传媒区 */
-  .media-section {
-    background: linear-gradient(135deg, rgba(255,193,7,0.08), rgba(255,143,0,0.05));
-    border: 1px solid var(--glass-border);
-    border-radius: 24px; padding: 60px;
-    margin-top: 40px;
-  }
-  .media-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 32px; margin-top: 40px; margin-bottom: 40px;
-  }
-  .media-item h4 {
-    font-size: 18px; color: var(--neon-cyan); margin-bottom: 12px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .media-item p {
-    color: var(--text-secondary); font-size: 15px; line-height: 1.8;
-  }
-  .media-contact {
-    text-align: center; padding-top: 32px;
-    border-top: 1px solid rgba(255,193,7,0.2);
-  }
-  .media-contact p {
-    color: var(--text-secondary); font-size: 16px; margin-bottom: 20px;
-  }
-  .media-contact .contact-info {
-    display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
-    margin-bottom: 24px;
-  }
-  .media-contact .contact-info span {
-    color: var(--text-primary); font-size: 15px;
+  /* AI 终端卡 */
+  .ai-term { font-family: var(--mono); font-size: 13.5px; }
+  .ai-term .bar {
     display: flex; align-items: center; gap: 8px;
+    padding: 12px 18px; border-bottom: 1px solid var(--line); background: rgba(255,204,0,0.05);
   }
+  .ai-term .bar i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,204,0,0.3); }
+  .ai-term .bar i:first-child { background: var(--yellow); }
+  .ai-term .bar b { margin-left: 8px; font-weight: 400; font-size: 11px; letter-spacing: 0.18em; color: var(--text-3); }
+  .ai-term .body { padding: 26px 24px 30px; min-height: 330px; display: flex; flex-direction: column; gap: 18px; }
+  .t-line { display: flex; gap: 12px; align-items: flex-start; }
+  .t-who { color: var(--yellow); flex-shrink: 0; font-size: 11px; letter-spacing: 0.14em; margin-top: 4px; }
+  .t-msg {
+    color: var(--text-2); background: rgba(255,255,255,0.035);
+    border-left: 2px solid rgba(255,204,0,0.35);
+    padding: 10px 16px; line-height: 1.8;
+  }
+  .t-msg.me { border-left-color: rgba(255,255,255,0.18); }
+  .cursor-blink { display: inline-block; width: 9px; height: 16px; background: var(--yellow); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .ai-core {
+    position: absolute; right: -34px; top: -34px; width: 110px; height: 110px;
+    border: 1px dashed rgba(255,204,0,0.4); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 10px; color: var(--yellow);
+    letter-spacing: 0.2em; animation: spin 14s linear infinite; z-index: 3;
+    background: rgba(10,10,8,0.85);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* CTA下载区 */
-  .cta-section {
-    text-align: center; padding: 100px 24px;
-    position: relative; overflow: hidden;
+  /* ===== 多端 ===== */
+  .plat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+  .plat {
+    border: 1px solid var(--line); padding: 30px 22px;
+    background: var(--panel); text-align: center;
+    transition: transform .35s, border-color .35s, background .35s;
   }
-  .cta-section::before {
+  .plat:hover { transform: translateY(-6px); border-color: rgba(255,204,0,0.45); background: #16150d; }
+  .plat .ico { font-size: 30px; margin-bottom: 14px; }
+  .plat b { display: block; font-size: 16.5px; font-weight: 800; margin-bottom: 4px; }
+  .plat span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; color: var(--text-3); }
+  .plat .soon { color: var(--amber); }
+
+  /* ===== 合作 ===== */
+  .coop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .coop {
+    position: relative; padding: 36px 28px; border: 1px solid var(--line);
+    background: var(--panel); overflow: hidden;
+    transition: transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s;
+  }
+  .coop:hover { transform: translateY(-7px); box-shadow: 0 24px 60px rgba(255,204,0,0.09); }
+  .coop em {
+    font-style: normal; font-family: var(--mono); font-size: 11px;
+    color: var(--yellow); letter-spacing: 0.22em; display: block; margin-bottom: 16px;
+  }
+  .coop h4 { font-size: 20px; font-weight: 900; margin-bottom: 12px; }
+  .coop p { font-size: 13.5px; color: var(--text-2); margin-bottom: 22px; }
+  .coop a {
+    font-size: 13.5px; font-weight: 700; color: var(--yellow); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px; transition: gap .25s;
+  }
+  .coop a:hover { gap: 14px; }
+
+  /* 合作联系条 */
+  .coop-cta {
+    margin-top: 34px; padding: 26px 30px;
+    border: 1px dashed rgba(255,204,0,0.35); background: rgba(255,204,0,0.04);
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .coop-cta .mono { color: var(--yellow); letter-spacing: 0.2em; font-size: 11px; }
+  .coop-cta p { color: var(--text-2); font-size: 15px; flex: 1 1 300px; margin: 0; }
+  .coop-cta p b { color: var(--text); }
+  .coop-cta .btn { padding: 12px 26px; flex-shrink: 0; }
+
+  /* ===== CTA ===== */
+  .cta { text-align: center; padding: 130px 0; position: relative; overflow: hidden; }
+  .cta::before {
     content: ''; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px; height: 600px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,193,7,0.2), transparent 70%);
-    filter: blur(40px);
+    width: 720px; height: 720px; transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255,204,0,0.12), transparent 65%);
+    filter: blur(30px); pointer-events: none;
   }
-  .cta-section h2 {
-    font-size: clamp(28px, 4vw, 44px); font-weight: 800;
-    margin-bottom: 16px; position: relative;
-  }
-  .cta-section p {
-    color: var(--text-secondary); font-size: 18px;
-    margin-bottom: 40px; position: relative;
-  }
-  .cta-buttons {
-    display: flex; gap: 20px; justify-content: center;
-    flex-wrap: wrap; position: relative;
-  }
+  .cta .sec-tag { justify-content: center; }
+  .cta .sec-tag::after { content: ''; width: 34px; height: 1px; background: var(--yellow); }
+  .cta h2 { font-size: clamp(32px, 5vw, 58px); font-weight: 900; line-height: 1.25; margin-bottom: 20px; }
+  .cta h2 .chip { box-shadow: 8px 8px 0 rgba(255,204,0,0.22); }
+  .cta p { color: var(--text-2); font-size: 17px; margin-bottom: 46px; }
+  .cta-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; position: relative; }
+  .cta-note { margin-top: 22px; font-size: 12.5px; color: var(--text-3); font-family: var(--mono); letter-spacing: 0.06em; }
 
-  /* Footer */
-  footer {
-    border-top: 1px solid rgba(255,193,7,0.15);
-    padding: 60px 24px 30px;
-    position: relative; z-index: 1;
-    background: rgba(10, 9, 6, 0.6);
+  /* ===== Footer ===== */
+  footer { border-top: 1px solid var(--line); background: rgba(255,204,0,0.02); position: relative; z-index: 1; }
+  .f-grid {
+    display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1fr;
+    gap: 36px; padding: 70px 0 50px;
   }
-  .footer-container { max-width: 1200px; margin: 0 auto; }
-  .footer-grid {
-    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-    gap: 32px; margin-bottom: 40px;
+  .f-brand img { height: 46px; border-radius: 8px; margin-bottom: 18px; }
+  .f-brand p { color: var(--text-3); font-size: 13.5px; max-width: 320px; margin-bottom: 18px; }
+  .f-brand .mono { font-size: 11px; letter-spacing: 0.2em; color: var(--yellow); opacity: 0.8; }
+  .f-col h5 {
+    font-size: 13px; letter-spacing: 0.2em; color: var(--yellow);
+    font-family: var(--mono); font-weight: 400; margin-bottom: 20px;
   }
-  .footer-brand .logo {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+  .f-col ul { list-style: none; }
+  .f-col li { margin-bottom: 11px; }
+  .f-col a { color: var(--text-3); text-decoration: none; font-size: 13.5px; transition: color .25s; }
+  .f-col a:hover { color: var(--yellow); }
+  .f-bottom {
+    border-top: 1px solid var(--line-soft); padding: 24px 0 30px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
   }
-  .footer-brand .logo img {
-    height: 52px; width: auto; border-radius: 6px;
-  }
-  .footer-brand .logo span {
-    font-size: 22px; font-weight: 800; letter-spacing: 3px;
-    background: var(--gradient-text);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .footer-brand p {
-    color: var(--text-muted); font-size: 14px; line-height: 1.8;
-    max-width: 300px;
-  }
-  .footer-col h5 {
-    color: #fff; font-size: 15px; margin-bottom: 18px; font-weight: 600;
-  }
-  .footer-col ul { list-style: none; }
-  .footer-col li { margin-bottom: 10px; }
-  .footer-col a {
-    color: var(--text-muted); text-decoration: none;
-    font-size: 14px; transition: color 0.3s;
-  }
-  .footer-col a:hover { color: var(--neon-cyan); }
-  .footer-bottom {
-    border-top: 1px solid rgba(255,193,7,0.1);
-    padding-top: 24px;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 12px;
-  }
-  .footer-bottom p { color: var(--text-muted); font-size: 13px; }
+  .f-bottom p { color: var(--text-3); font-size: 12.5px; font-family: var(--mono); letter-spacing: 0.04em; }
+  .f-bottom a { color: var(--text-3); text-decoration: none; }
+  .f-bottom a:hover { color: var(--yellow); }
 
-  /* 滚动动画 */
-  .fade-in {
-    opacity: 0; transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+  /* ===== 响应式 ===== */
+  @media (max-width: 1080px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 70px; }
+    .hero { padding-top: 130px; }
+    .hero-visual { order: -1; }
+    .orbit-badge.ob1 { left: -4%; }
+    .orbit-badge.ob2 { right: -4%; }
+    .hero-coord { display: none; }
+    .para-grid { grid-template-columns: 1fr; }
+    .plat-grid { grid-template-columns: repeat(3, 1fr); }
+    .coop-grid { grid-template-columns: repeat(2, 1fr); }
+    .f-grid { grid-template-columns: 1fr 1fr; }
   }
-  .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-  /* 响应式 */
-  @media (max-width: 900px) {
-    .nav-links { display: none; }
-    .menu-toggle { display: block; }
-    .nav-links.open {
-      display: flex; flex-direction: column;
-      position: absolute; top: 100%; left: 0; right: 0;
-      background: rgba(10,9,6,0.95); backdrop-filter: blur(20px);
-      padding: 24px; gap: 20px;
-      border-bottom: 1px solid var(--glass-border);
+  @media (max-width: 860px) {
+    .nav-links {
+      display: none; position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; align-items: flex-start; gap: 4px;
+      background: rgba(10,10,8,0.97); border-bottom: 1px solid var(--line);
+      padding: 18px 28px 26px; backdrop-filter: blur(18px);
     }
-    .hero-container { grid-template-columns: 1fr; text-align: center; }
-    .hero-content { order: 2; }
-    .hero-visual { order: 1; }
-    .hero-buttons { justify-content: center; }
-    .business-section, .business-section.reverse {
-      grid-template-columns: 1fr; direction: ltr;
-    }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-    .media-section { padding: 40px 24px; }
+    .nav-links.open { display: flex; }
+    .nav-links a { font-size: 16px; padding: 10px 0; }
+    .menu-btn { display: block; }
+    .split, .split.flip { grid-template-columns: 1fr; gap: 44px; }
+    .split.flip .split-media { order: 0; }
+    .hero-stats { width: 100%; }
+    .hstat { flex: 1; padding: 14px 12px; text-align: center; }
+    .hstat b { font-size: 18px; }
+    section { padding: 80px 0; }
   }
-  @media (max-width: 500px) {
-    .footer-grid { grid-template-columns: 1fr; }
-    .hero-badge { display: none; }
+  @media (max-width: 560px) {
+    .plat-grid { grid-template-columns: repeat(2, 1fr); }
+    .coop-grid { grid-template-columns: 1fr; }
+    .f-grid { grid-template-columns: 1fr; }
+    .orbit-badge { display: none; }
+    .hud { padding: 26px; }
   }
 </style>
 </head>
 <body>
-<div class="stars-bg"></div>
+<div class="bg-layer bg-grid"></div>
+<div class="bg-layer bg-glow"></div>
+<div class="bg-layer bg-grain"></div>
 
-<!-- 导航栏 -->
-<nav class="navbar" id="navbar">
-  <div class="nav-container">
-    <a href="/" class="nav-logo">
+<!-- 导航 -->
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <a href="/" class="logo">
       <img src="KOKO-logo.jpg" alt="KOKO空空">
-      <span>空空</span>
+      <b>空空<i>_</i>KOKO</b>
     </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#home">首页</a></li>
-      <li><a href="#features">核心功能</a></li>
+      <li><a href="#paradigm">新范式</a></li>
+      <li><a href="#ai">AI 伙伴</a></li>
+      <li><a href="#space">社区空间</a></li>
       <li><a href="#pewan">电竞陪玩</a></li>
-      <li><a href="#gift">元宇宙礼物</a></li>
-      <li><a href="/partner/">合作入驻</a></li>
-      <li><a href="#download" class="nav-download">立即下载</a></li>
+      <li><a href="#partner">合作入驻</a></li>
+      <li><a href="#download" class="nav-cta">立即下载</a></li>
     </ul>
-    <button class="menu-toggle" id="menuToggle">☰</button>
+    <button class="menu-btn" id="menuBtn">≡</button>
   </div>
 </nav>
 
-<!-- Hero -->
-<section class="hero" id="home">
-  <div class="hero-container">
-    <div class="hero-content">
-      <p class="subtitle">KOKO · 元宇宙陪伴平台</p>
-      <h1>你的<span class="gradient">元宇宙</span><br>陪伴者</h1>
-      <p class="slogan">虚空有灵 · 陪伴有声</p>
-      <div class="hero-buttons">
-        <a href="#download" class="btn btn-primary">
-          <span class="btn-icon">⬇</span> 立即下载
-        </a>
-        <a href="/partner/" class="btn btn-secondary">
-          <span class="btn-icon">🤝</span> 合作入驻
-        </a>
+<!-- HERO -->
+<header class="hero" id="home">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="hero-tag"><i class="dot"></i>KOKO KONGKONG // AI × METAVERSE OS</span>
+        <h1>人工智能元宇宙时代<br>的<span class="hl">生活新范式</span></h1>
+        <p class="hero-slogan">虚空有灵 · <b>陪伴有声</b> · 空间无界</p>
+        <p class="hero-desc">
+          KOKO空空，你的 AI 原生元宇宙生活空间。<b>AI 伙伴</b>随时在线，<b>虚拟社交</b>灵魂共振，
+          <b>兴趣社区</b>干净纯粹，<b>元宇宙礼物</b>心意直达，<b>电竞陪玩</b>即刻开黑 —— 一个 App，装下新世代的生活方式。
+        </p>
+        <div class="hero-btns">
+          <a href="#download" class="btn btn-y">⬇ 立即下载</a>
+          <a href="#partner" class="btn btn-ghost">合作入驻 →</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hstat"><b>05</b><span>端全互通</span></div>
+          <div class="hstat"><b>7×24</b><span>AI 在线</span></div>
+          <div class="hstat"><b>0</b><span>广告打扰</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <span class="hero-coord l">LAT 26.0745 // NINGBO</span>
+        <span class="hero-coord r">SYS.KOKO // V2.0 ONLINE</span>
+        <div class="hud cross">
+          <span class="hud-label">KOKO://LIFE.OS</span>
+          <span class="hud-label rt">● LIVE</span>
+          <i class="c3"></i><i class="c4"></i>
+          <img src="KOKO-logo.jpg" alt="KOKO空空 App">
+          <div class="orbit-badge ob1"><em>AI</em>AI 数字伙伴</div>
+          <div class="orbit-badge ob2"><em>🎁</em>元宇宙礼物</div>
+          <div class="orbit-badge ob3"><em>🎮</em>电竞陪玩开黑</div>
+        </div>
       </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-icon-wrap">
-        <img src="KOKO-logo.jpg" alt="KOKO空空App" class="hero-icon">
-        <div class="hero-badge b1">🎮 海量认证陪玩</div>
-        <div class="hero-badge b2">🎁 元宇宙礼物</div>
-        <div class="hero-badge b3">🌌 沉浸式社交</div>
+  </div>
+</header>
+
+<!-- 跑马灯 -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <span>AI 原生陪伴 <i>✦</i></span><span>元宇宙社交 <i>✦</i></span><span>干净社交空间 <i>✦</i></span><span>元宇宙礼物 <i>✦</i></span><span>电竞陪玩 <i>✦</i></span><span>语音空间 <i>✦</i></span><span>虚拟形象 <i>✦</i></span><span>兴趣社区 <i>✦</i></span><span>生活新范式 <i>✦</i></span>
+  </div>
+</div>
+
+<!-- 三大范式 -->
+<section id="paradigm">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-tag">PARADIGM SHIFT</span>
+      <h2>三种范式，<span class="chip">一次切换</span></h2>
+      <p class="sub">当人工智能遇见元宇宙，生活方式被重新定义 —— 社交、空间、娱乐，三条平行世界线在 KOKO空空 交汇。</p>
+    </div>
+    <div class="para-grid">
+      <div class="para-card rv">
+        <div class="para-num">01</div>
+        <div class="para-cat">SOCIAL / 社交范式</div>
+        <h3><span>AI 原生</span>的陪伴与社交</h3>
+        <p>从「找人聊天」到「被懂」，AI 伙伴与虚拟社交重构人与人的连接方式。</p>
+        <ul>
+          <li>AI 数字伙伴 7×24 情绪在线</li>
+          <li>虚拟空间实时互动，同好聚集</li>
+          <li>从一对一陪伴到群体共鸣</li>
+        </ul>
+      </div>
+      <div class="para-card rv">
+        <div class="para-num">02</div>
+        <div class="para-cat">SPACE / 空间范式</div>
+        <h3>干净纯粹的<span>社交空间</span></h3>
+        <p>没有喧嚣与打扰，只有兴趣相投的人 —— 每个空间都由你和同好共同塑造。</p>
+        <ul>
+          <li>兴趣社区按喜好聚合，同好即邻居</li>
+          <li>语音空间随时开麦，畅聊不设限</li>
+          <li>社区公约守护，干净无广告</li>
+        </ul>
+      </div>
+      <div class="para-card rv">
+        <div class="para-num">03</div>
+        <div class="para-cat">PLAY / 娱乐范式</div>
+        <h3>沉浸式的<span>元宇宙体验</span></h3>
+        <p>电竞、语音、虚拟世界，娱乐不再是消遣，而是新的生活方式本身。</p>
+        <ul>
+          <li>主流游戏认证陪玩随时开黑</li>
+          <li>语音空间、社区频道沉浸畅聊</li>
+          <li>元宇宙礼物与场景深度联动</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 核心功能 -->
-<section id="features">
-  <div class="section-container">
-    <div class="section-header fade-in">
-      <span class="section-tag">CORE FEATURES</span>
-      <h2 class="section-title">三大核心<span class="gradient">功能</span></h2>
-      <p class="section-desc">以电竞陪玩为入口，以元宇宙礼物开放平台为载体，构建沉浸式虚拟社交空间</p>
-    </div>
-    <div class="feature-grid">
-      <div class="feature-card fade-in">
-        <div class="feature-icon">🎮</div>
-        <h3>电竞陪玩</h3>
-        <p>覆盖王者荣耀、英雄联盟、和平精英、原神等主流游戏。海量认证陪玩，大神/萌妹/声控多维筛选，技术carry+暖心陪伴，随时组队开黑。打手、公会火热入驻中。</p>
+<!-- AI 伙伴 -->
+<section id="ai">
+  <div class="wrap">
+    <div class="split rv">
+      <div class="split-copy">
+        <span class="split-kicker">AI COMPANION / 01</span>
+        <h3>你的 <span class="chip">AI 伙伴</span><br>永远在线</h3>
+        <p class="lead">在 KOKO空空，AI 不是工具，是<b>懂你的数字生命</b>。它记得你的喜好，接得住你的情绪，陪得了你的深夜。</p>
+        <ul class="pt-list">
+          <li><em>AI.01</em><span><b>AI 数字伙伴</b>7×24 在线，情绪感知与个性对话，越聊越懂你</span></li>
+          <li><em>AI.02</em><span><b>智能空间助手</b>社区、频道、语音房内随叫随到的万能搭子</span></li>
+          <li><em>AI.03</em><span><b>AI 内容共创</b>从聊天到创作，与 AI 一起产出专属内容</span></li>
+        </ul>
+        <a href="#download" class="btn btn-ghost">体验 AI 伙伴 →</a>
       </div>
-      <div class="feature-card fade-in">
-        <div class="feature-icon">🎁</div>
-        <h3>元宇宙礼物开放平台</h3>
-        <p>开放IP入驻的元宇宙礼物平台，装饰/特效/限定多品类持续上新。链上确权独一无二，送礼/收藏/展示多元玩法，与陪玩场景深度联动，打赏表白纪念一应俱全。</p>
-      </div>
-      <div class="feature-card fade-in">
-        <div class="feature-icon">🌌</div>
-        <h3>元宇宙社交</h3>
-        <p>虚拟空间实时互动，找到懂你的同好。从一对一陪伴到群体共鸣，打造专属数字社交圈，让每一次相遇都是灵魂的共振。</p>
+      <div class="split-media">
+        <div class="frame cross">
+          <span class="ai-core">AI · CORE</span>
+          <div class="ai-term">
+            <div class="bar"><i></i><i></i><i></i><b>KOKO://AI_TERMINAL — CONNECTED</b></div>
+            <div class="body">
+              <div class="t-line"><span class="t-who">YOU</span><span class="t-msg me">今天比赛输了，有点emo…</span></div>
+              <div class="t-line"><span class="t-who">KOKO</span><span class="t-msg">输一局而已，你已经比昨天的你更强了。要不要叫上老搭档再来一局？我帮你约人，或者…先聊聊天？</span></div>
+              <div class="t-line"><span class="t-who">YOU</span><span class="t-msg me">你为什么总是这么懂我？</span></div>
+              <div class="t-line"><span class="t-who">KOKO</span><span class="t-msg">因为虚空有灵，陪伴有声。<span class="cursor-blink"></span></span></div>
+            </div>
+          </div>
+          <span class="cap">AI_COMPANION_v2 — <i>EMPATHY MODULE ONLINE</i></span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 电竞陪玩详情 -->
+<!-- 社区空间 -->
+<section id="space">
+  <div class="wrap">
+    <div class="split flip rv">
+      <div class="split-copy">
+        <span class="split-kicker">CLEAN SPACE / 02</span>
+        <h3>一个干净的<br><span class="chip">社交空间</span></h3>
+        <p class="lead">KOKO空空拒绝喧嚣与信息噪音。在元宇宙社区里，<b>每个空间都干净、专注、有温度</b> —— 兴趣相投的人在这里相聚、畅聊、共创。</p>
+        <ul class="pt-list">
+          <li><em>SP.01</em><span><b>兴趣社区</b>按兴趣聚合的空间与频道，同好即邻居，进来就是主场</span></li>
+          <li><em>SP.02</em><span><b>语音空间</b>随时开麦的语音房，开黑、聊天、听歌，陪伴感拉满</span></li>
+          <li><em>SP.03</em><span><b>元宇宙礼物</b>把心意做成会动的礼物，在对话与场景中随时送达</span></li>
+        </ul>
+        <a href="#download" class="btn btn-ghost">进入社区空间 →</a>
+      </div>
+      <div class="split-media">
+        <div class="frame cross">
+          <img src="images/gift.jpg" alt="KOKO空空元宇宙社交空间">
+          <span class="cap">METAVERSE_SPACE — <i>CLEAN & WARM</i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 电竞陪玩 -->
 <section id="pewan">
-  <div class="section-container">
-    <div class="business-section fade-in">
-      <div class="business-image">
-        <img src="images/pewan.jpg" alt="电竞陪玩">
-      </div>
-      <div class="business-content">
-        <span class="tag cyan">🎮 电竞陪玩</span>
-        <h3>上分有队友，<br>孤独有KOKO空空</h3>
-        <p>专业电竞陪玩平台，主流游戏全覆盖。无论是想冲分上段，还是只想有人陪你聊聊天打打游戏，KOKO空空都能为你精准匹配最合适的陪伴者。</p>
-        <ul class="business-points">
-          <li>海量认证陪玩，技术/声音/性格多维筛选</li>
-          <li>实时匹配秒开黑，不等待不尴尬</li>
-          <li>平台担保交易，安全有保障</li>
-          <li>不止陪玩，更是懂你的游戏伙伴</li>
+  <div class="wrap">
+    <div class="split rv">
+      <div class="split-copy">
+        <span class="split-kicker">ESPORTS / 03</span>
+        <h3>上分有队友<br>孤独有<span class="chip">空空</span></h3>
+        <p class="lead">KOKO空空<b>电竞陪玩社区</b>，欢迎广大游戏主播入驻，搭建<b>自己的专属陪玩空间</b> —— 优质游戏语音服务，一键添加微信等全流程服务，从认识到开黑一站直达。</p>
+        <ul class="pt-list">
+          <li><em>PW.01</em><span><b>主播陪玩空间</b>游戏主播自主搭建专属空间，主页即门面，粉丝一键直达</span></li>
+          <li><em>PW.02</em><span><b>优质游戏语音</b>高清语音开黑，技术陪伴与情绪价值同时在线</span></li>
+          <li><em>PW.03</em><span><b>全流程服务</b>从匹配、组队到一键添加微信，全流程顺畅不折腾</span></li>
         </ul>
-        <div class="business-cta">
-          <a href="/partner/" class="btn-small primary">🎯 打手入驻</a>
-          <a href="/partner/" class="btn-small outline">🏢 公会入驻</a>
+        <div class="hero-btns" style="margin-bottom:0">
+          <a href="#partner" class="btn btn-y">🎮 主播入驻</a>
+          <a href="#download" class="btn btn-ghost">🎧 逛陪玩社区</a>
+        </div>
+      </div>
+      <div class="split-media">
+        <div class="frame cross">
+          <img src="images/pewan.jpg" alt="KOKO空空电竞陪玩">
+          <span class="cap">ESPORTS_COMPANION — <i>MATCHMAKING READY</i></span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 元宇宙礼物详情 -->
-<section id="gift">
-  <div class="section-container">
-    <div class="business-section reverse fade-in">
-      <div class="business-image">
-        <img src="images/gift.jpg" alt="元宇宙礼物">
-      </div>
-      <div class="business-content">
-        <span class="tag pink">🎁 元宇宙礼物开放平台</span>
-        <h3>每一份心意，<br>都独一无二</h3>
-        <p>KOKO空空元宇宙礼物开放平台，面向全球IP开放入驻。提供丰富多样的虚拟礼物，链上确权不可篡改，每一份礼物都承载着专属心意。送花会谢，元宇宙礼物永远闪耀。</p>
-        <ul class="business-points">
-          <li>开放IP入驻，品牌/动漫/游戏/艺术家均可合作</li>
-          <li>丰富虚拟礼物库，装饰/特效/限定多品类持续上新</li>
-          <li>链上确权，每一份礼物独一无二不可篡改</li>
-          <li>送礼/收藏/展示多元玩法，与陪玩场景深度联动</li>
-        </ul>
-        <div class="business-cta">
-          <a href="/partner/" class="btn-small primary">🖼️ IP入驻开放平台</a>
-        </div>
-      </div>
+<!-- 多端 -->
+<section id="platforms">
+  <div class="wrap">
+    <div class="sec-head rv" style="text-align:center">
+      <span class="sec-tag" style="justify-content:center">OMNI-PLATFORM</span>
+      <h2>五端互通，<span class="chip">无缝生活</span></h2>
+      <p class="sub" style="margin:18px auto 0">一个账号，手机、电脑、浏览器全打通 —— 新范式不该被设备束缚。</p>
+    </div>
+    <div class="plat-grid rv">
+      <div class="plat"><div class="ico">📱</div><b>iOS</b><span>APP STORE</span></div>
+      <div class="plat"><div class="ico">🤖</div><b>Android</b><span>APK 直装</span></div>
+      <div class="plat"><div class="ico">🪟</div><b>Windows</b><span>DESKTOP</span></div>
+      <div class="plat"><div class="ico">🍎</div><b>macOS</b><span class="soon">COMING SOON</span></div>
+      <div class="plat"><div class="ico">🌐</div><b>Web</b><span>BROWSER</span></div>
     </div>
   </div>
 </section>
 
-<!-- 合作入驻专区 -->
+<!-- 合作 -->
 <section id="partner">
-  <div class="section-container">
-    <div class="section-header fade-in">
-      <span class="section-tag">PARTNER PROGRAM</span>
-      <h2 class="section-title">合作<span class="gradient">入驻</span></h2>
-      <p class="section-desc">KOKO空空开放平台，欢迎打手、公会、IP方、网红达人携手共建元宇宙陪伴生态</p>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-tag">OPEN PLATFORM</span>
+      <h2>共建元宇宙<span class="chip">新生态</span></h2>
+      <p class="sub">合作统一渠道：下载 KOKO空空 App，加入官方社区，在社区内即可联系官方团队 —— 与我们共同定义人工智能元宇宙时代的生活方式。</p>
     </div>
-    <div class="partner-grid">
-      <div class="partner-card fade-in">
-        <div class="partner-icon">🎯</div>
-        <h4>打手入驻</h4>
-        <p>技术过硬、声音好听、性格有趣？加入KOKO空空陪玩大军，平台海量订单，灵活接单，收入上不封顶。认证审核通过即可上线接单。</p>
-        <a href="/partner/" class="btn-small primary">立即入驻</a>
+    <div class="coop-grid">
+      <div class="coop rv">
+        <em>COOP.01</em><h4>主播入驻</h4>
+        <p>欢迎广大游戏主播入驻，搭建自己的专属陪玩空间，提供优质游戏语音服务，粉丝一键直达。</p>
+        <a href="#download">下载 App 入驻 →</a>
       </div>
-      <div class="partner-card fade-in">
-        <div class="partner-icon">🏢</div>
-        <h4>公会入驻</h4>
-        <p>电竞公会、陪玩工作室、MCN机构批量入驻。享受公会专属政策、订单倾斜、运营扶持、结算优惠，与KOKO空空共同成长。</p>
-        <a href="/partner/" class="btn-small primary">公会合作</a>
+      <div class="coop rv">
+        <em>COOP.02</em><h4>公会合作</h4>
+        <p>电竞公会、陪玩工作室、MCN 批量入驻，专属政策、订单倾斜与运营扶持。</p>
+        <a href="#download">下载 App 对接 →</a>
       </div>
-      <div class="partner-card fade-in">
-        <div class="partner-icon">🖼️</div>
-        <h4>IP入驻元宇宙礼物</h4>
-        <p>品牌方、动漫IP、游戏IP、艺术家、设计师均可入驻KOKO空空元宇宙礼物开放平台。你的IP变成独一无二的链上礼物，触达海量年轻用户。</p>
-        <a href="/partner/" class="btn-small primary">IP合作</a>
+      <div class="coop rv">
+        <em>COOP.03</em><h4>IP 方合作</h4>
+        <p>品牌 / 动漫 / 游戏 / 艺术家入驻，共创元宇宙主题空间与虚拟内容。</p>
+        <a href="#download">下载 App 合作 →</a>
       </div>
-      <div class="partner-card fade-in">
-        <div class="partner-icon">📱</div>
-        <h4>网红达人对接</h4>
-        <p>抖音、快手、B站、小红书网红达人合作对接。内容种草、直播带货、联名活动、专属礼物，全链路赋能品牌曝光与用户增长。</p>
-        <a href="/partner/" class="btn-small primary">达人合作</a>
+      <div class="coop rv">
+        <em>COOP.04</em><h4>B 端品牌</h4>
+        <p>品牌空间定制、主题活动共建、内容生态合作 —— 面向企业的元宇宙新场景。</p>
+        <a href="#download">下载 App 洽谈 →</a>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 核心价值 -->
-<section>
-  <div class="section-container">
-    <div class="section-header fade-in">
-      <span class="section-tag">WHY KOKO</span>
-      <h2 class="section-title">为什么选择<span class="gradient">KOKO空空</span></h2>
-      <p class="section-desc">不做冷冰冰的匹配平台，做懂你的数字伙伴</p>
-    </div>
-    <div class="value-grid">
-      <div class="value-card fade-in">
-        <div class="icon">💝</div>
-        <h4>陪伴感</h4>
-        <p>打破孤独，随时有人懂你<br>7×24小时匹配</p>
-      </div>
-      <div class="value-card fade-in">
-        <div class="icon">🚀</div>
-        <h4>沉浸感</h4>
-        <p>元宇宙级别虚拟交互体验<br>身临其境的社交</p>
-      </div>
-      <div class="value-card fade-in">
-        <div class="icon">💎</div>
-        <h4>专属感</h4>
-        <p>元宇宙礼物链上确权<br>每一份心意永久铭记</p>
-      </div>
-      <div class="value-card fade-in">
-        <div class="icon">👥</div>
-        <h4>社群感</h4>
-        <p>电竞同好聚集地<br>从一对一到群体共鸣</p>
-      </div>
+    <div class="coop-cta rv">
+      <span class="mono">CONTACT // IN-APP</span>
+      <p>合作洽谈统一渠道：加入 <b>KOKO空空 App 官方社区</b>，在社区内联系官方团队（主播 / 公会 / IP / 达人 / 品牌）</p>
+      <a href="#download" class="btn btn-y">🚀 加入官方社区</a>
+      <a href="#download" class="btn btn-ghost">⬇ 下载 App</a>
     </div>
   </div>
 </section>
 
-<!-- CTA下载 -->
-<section class="cta-section" id="download">
-  <div class="section-container">
-    <div class="fade-in">
-      <h2>开启你的<span style="background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">元宇宙陪伴</span>之旅</h2>
-      <p>虚空有灵，陪伴有声。下载KOKO空空，遇见懂你的陪伴。</p>
-      <div class="cta-buttons">
-        <a href="#" class="btn btn-primary" onclick="return false;" style="opacity:0.85;cursor:not-allowed;">
-          <span class="btn-icon">🍎</span> App Store 即将上线
-        </a>
-        <a href="/download/KOKO.apk" class="btn btn-secondary">
-          <span class="btn-icon">🤖</span> 安卓下载
-        </a>
-        <a href="/download/KOKO_Setup_1.1.5.zip" class="btn btn-secondary">
-          <span class="btn-icon">🪟</span> Windows 下载
-        </a>
-        <a href="/webapp/" class="btn btn-secondary" target="_blank" rel="noopener">
-          <span class="btn-icon">🌐</span> 网页版
-        </a>
-      </div>
-      <p style="margin-top:18px;font-size:13px;color:var(--text-secondary,#8a8a8a);">
-        Windows 版为 zip 压缩包：下载后解压运行 <b>KOKO_Setup_1.1.5.exe</b>；若解压或安装时系统提示「已保护你的电脑」，点击「更多信息 → 仍要运行」即可。
-      </p>
+<!-- CTA 下载 -->
+<section class="cta" id="download">
+  <div class="wrap rv">
+    <span class="sec-tag">GET STARTED</span>
+    <h2>开启你的<span class="chip">新范式生活</span></h2>
+    <p>虚空有灵，陪伴有声。下载 KOKO空空，进入干净纯粹的人工智能元宇宙。</p>
+    <div class="cta-btns">
+      <a href="javascript:void(0)" class="btn btn-ghost js-soon" data-name="iOS" style="opacity:.6;">🍎 App Store 即将上线</a>
+      <a href="javascript:void(0)" class="btn btn-ghost js-soon" data-name="macOS" style="opacity:.6;">💻 macOS 即将上线</a>
+      <a href="/download/KOKO.apk" class="btn btn-y">🤖 安卓下载</a>
+      <a href="/download/KOKO_Setup_1.1.5.zip" class="btn btn-ghost">🪟 Windows 下载</a>
+      <a href="/webapp/" class="btn btn-ghost" target="_blank" rel="noopener">🌐 网页版</a>
     </div>
+    <p class="cta-note">TIP: Windows 版为 zip 压缩包，解压运行 KOKO_Setup_1.1.5.exe；若系统提示「已保护你的电脑」，点击「更多信息 → 仍要运行」。</p>
   </div>
 </section>
 
 <!-- Footer -->
 <footer>
-  <div class="footer-container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="logo">
-          <img src="KOKO-logo.jpg" alt="KOKO空空">
-          <span>空空</span>
-        </div>
-        <p>你的元宇宙陪伴者。以电竞陪玩为核心，以元宇宙礼物开放平台为载体，打造有温度的虚拟社交空间。</p>
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <img src="KOKO-logo.jpg" alt="KOKO空空">
+        <p>人工智能元宇宙时代生活新范式。AI 原生陪伴 × 元宇宙社交 × 沉浸娱乐，打造有温度、有乐趣的新世代生活方式。</p>
+        <div class="mono">KOKO://LIFE.OS — V2.0</div>
       </div>
-      <div class="footer-col">
+      <div class="f-col">
         <h5>产品</h5>
         <ul>
+          <li><a href="#ai">AI 伙伴</a></li>
+          <li><a href="#space">社区空间</a></li>
           <li><a href="#pewan">电竞陪玩</a></li>
-          <li><a href="#gift">元宇宙礼物</a></li>
-          <li><a href="#features">核心功能</a></li>
           <li><a href="#download">立即下载</a></li>
         </ul>
       </div>
-      <div class="footer-col">
+      <div class="f-col">
         <h5>合作</h5>
         <ul>
-          <li><a href="/partner/">打手入驻</a></li>
-          <li><a href="/partner/">公会入驻</a></li>
-          <li><a href="/partner/">IP入驻</a></li>
-          <li><a href="/partner/">网红达人合作</a></li>
+          <li><a href="#partner">主播入驻</a></li>
+          <li><a href="#partner">公会入驻</a></li>
+          <li><a href="#partner">IP 入驻</a></li>
+          <li><a href="#partner">B 端品牌合作</a></li>
         </ul>
       </div>
-      <div class="footer-col">
+      <div class="f-col">
         <h5>法律协议</h5>
         <ul>
           <li><a href="/terms/">用户协议</a></li>
@@ -812,10 +820,9 @@
           <li><a href="/recharge/">充值协议</a></li>
           <li><a href="/account-deletion/">账号注销</a></li>
           <li><a href="/partner-agreement/">入驻服务协议</a></li>
-          <li><a href="/ranking-guarantee/">游戏上分保障</a></li>
         </ul>
       </div>
-      <div class="footer-col">
+      <div class="f-col">
         <h5>服务支持</h5>
         <ul>
           <li><a href="/support/">技术支持</a></li>
@@ -826,47 +833,53 @@
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2026 KOKO空空 KOKO · 元宇宙陪伴平台</p>
-      <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">闽ICP备2022005067号-10</a></p>
+    <div class="f-bottom">
+      <p>© 2026 KOKO空空 KOKO — AI METAVERSE LIFESTYLE</p>
+      <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备2022005067号-10</a></p>
     </div>
   </div>
 </footer>
 
+<div id="toast"></div>
 <script>
-  // 导航栏滚动效果
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-  });
+  // 导航滚动
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function () {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
 
   // 移动端菜单
-  const menuToggle = document.getElementById('menuToggle');
-  const navLinks = document.getElementById('navLinks');
-  menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-  });
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-    });
+  var menuBtn = document.getElementById('menuBtn');
+  var navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', function () { navLinks.classList.toggle('open'); });
+  navLinks.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { navLinks.classList.remove('open'); });
   });
 
-  // 滚动渐入动画
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
+  // 滚动渐入（含 stagger）
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.rv').forEach(function (el, i) {
+    el.style.transitionDelay = (i % 4) * 70 + 'ms';
+    io.observe(el);
+  });
 
-  document.querySelectorAll('.fade-in').forEach(el => {
-    observer.observe(el);
+  // 跑马灯内容复制一份实现无缝循环
+  var track = document.getElementById('tickerTrack');
+  track.innerHTML += track.innerHTML;
+
+  // 未上线渠道：点击引导到已有下载方式（无空按钮原则）
+  var toast = document.getElementById('toast'), toastTimer;
+  document.querySelectorAll('.js-soon').forEach(function (a) {
+    a.addEventListener('click', function () {
+      toast.textContent = (a.dataset.name || '该版本') + '版即将上线——可先下载安卓 / Windows 版，或直接使用网页版';
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 2800);
+    });
   });
 </script>
 </body>

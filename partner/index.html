@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>合作入驻 - KOKO空空 | 元宇宙陪伴平台</title>
-<meta name="description" content="KOKO空空合作入驻通道，长按识别公众号二维码，开启你的元宇宙陪伴生态合作之旅。">
+<meta name="description" content="KOKO空空合作入驻通道：下载 KOKO空空 App，加入官方社区，在社区内联系官方团队，开启你的元宇宙陪伴生态合作之旅。">
 <link rel="icon" type="image/jpeg" href="../KOKO-logo.jpg">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -93,20 +93,6 @@
     border-radius: 8px;
   }
   .contact-card h2 { font-size: 22px; color: #fff; margin-bottom: 10px; }
-  .contact-card .wechat-id {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 12px 24px;
-    background: rgba(255,213,79,0.08);
-    border: 1px solid rgba(255,213,79,0.3);
-    border-radius: 28px;
-    margin: 16px 0 28px;
-    font-size: 16px;
-    color: var(--neon-cyan);
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  .contact-card .wechat-id:hover { background: rgba(255,213,79,0.15); }
-  .contact-card .wechat-id .copy-tip { font-size: 12px; color: var(--text-muted); }
   .contact-card .hint {
     color: var(--text-secondary);
     font-size: 14px;
@@ -187,38 +173,30 @@
     <div class="page-header">
       <span class="page-tag">PARTNER PROGRAM</span>
       <h1 class="page-title">合作<span class="gradient">入驻</span></h1>
-      <p class="page-desc">长按识别公众号二维码，开启你的元宇宙陪伴生态合作之旅</p>
+      <p class="page-desc">三步加入 KOKO空空 App 官方社区，联系官方团队开启合作</p>
     </div>
 
     <div class="contact-card">
-      <div class="qr-wrap">
-        <img src="../images/wechat-qr.jpg" alt="KOKO空空公众号二维码" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-        <div class="qr-placeholder" style="display:none;">
-          二维码占位<br>
-          请放置图片至<br>
-          images/wechat-qr.jpg
-        </div>
-      </div>
-
-      <h2>KOKO空空App 公众号</h2>
-      <p style="color:var(--text-secondary);font-size:15px;margin-bottom:8px;">商务合作 · 打手入驻 · 公会入驻 · IP合作 · 达人对接</p>
-
-      <div class="wechat-id" id="wechatId" title="点击复制">
-        <span>微信号：KOKOApp_com</span>
-        <span class="copy-tip">点击复制</span>
-      </div>
+      <h2>加入 KOKO空空 App 官方社区</h2>
+      <p style="color:var(--text-secondary);font-size:15px;margin-bottom:8px;">主播入驻 · 公会合作 · IP合作 · 达人对接 · 品牌洽谈</p>
 
       <div class="hint">
         <ol>
-          <li>长按上方公众号二维码，识别图中二维码</li>
-          <li>在微信中关注"KOKO空空App"公众号</li>
-          <li>公众号内发送您的合作意向（打手 / 公会 / IP / 达人）</li>
-          <li>或手动添加微信号 <strong style="color:var(--neon-cyan)">KOKOApp_com</strong> 好友咨询</li>
+          <li>下载并安装 KOKO空空 App（安卓 / Windows / 网页版任一即可），注册账号</li>
+          <li>加入官方社区：手机点击「打开邀请链接」自动唤起 App；或在 App 内「使用邀请码加入空间」粘贴邀请码 <b style="color:var(--neon-cyan)">RACVJTEf</b></li>
+          <li>进入「KOKO官方社区」后，在社区内联系官方团队，说明合作意向（主播 / 公会 / IP / 达人 / 品牌）</li>
         </ol>
       </div>
 
       <div class="actions">
-        <a href="weixin://" class="btn btn-primary" id="openWechat">📱 拉起微信 App</a>
+        <a href="https://openelfai.cn/invite/RACVJTEf" target="_blank" rel="noopener" class="btn btn-primary">📱 打开邀请链接</a>
+        <a href="javascript:void(0)" class="btn btn-secondary" id="copyCode">📋 复制邀请码 RACVJTEf</a>
+      </div>
+
+      <div class="actions" style="margin-top:14px;">
+        <a href="/download/KOKO.apk" class="btn btn-secondary">🤖 安卓下载</a>
+        <a href="/download/KOKO_Setup_1.1.5.zip" class="btn btn-secondary">🪟 Windows 下载</a>
+        <a href="/webapp/" class="btn btn-secondary">🌐 网页版</a>
       </div>
     </div>
   </div>
@@ -229,15 +207,18 @@
   <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备2022005067号-10</a></p>
 </footer>
 
-<div class="toast" id="toast">已复制微信号，可在微信中搜索添加</div>
+<div class="toast" id="toast">邀请码已复制：RACVJTEf，请在 App 内「使用邀请码加入空间」粘贴</div>
 
 <script>
-  var wechatId = document.getElementById('wechatId');
   var toast = document.getElementById('toast');
-  wechatId.addEventListener('click', function() {
-    var text = 'KOKOApp_com';
+  function showToast() {
+    toast.classList.add('show');
+    setTimeout(function () { toast.classList.remove('show'); }, 2400);
+  }
+  document.getElementById('copyCode').addEventListener('click', function () {
+    var text = 'RACVJTEf';
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function() { showToast(); });
+      navigator.clipboard.writeText(text).then(showToast);
     } else {
       var ta = document.createElement('textarea');
       ta.value = text;
@@ -249,20 +230,7 @@
       document.body.removeChild(ta);
     }
   });
-  function showToast() {
-    toast.classList.add('show');
-    setTimeout(function() { toast.classList.remove('show'); }, 2000);
-  }
-
-  var openBtn = document.getElementById('openWechat');
-  openBtn.addEventListener('click', function(e) {
-    var ua = navigator.userAgent.toLowerCase();
-    var isWechat = ua.indexOf('micromessenger') !== -1;
-    if (isWechat) {
-      e.preventDefault();
-      alert('您已在微信内，请长按上方二维码识别关注公众号，或点击右上角菜单 → 重新进入公众号。');
-    }
-  });
 </script>
+
 </body>
 </html>
