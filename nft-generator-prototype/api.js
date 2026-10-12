@@ -1,10 +1,13 @@
-/* ===== api.js · API Stubs (未来对接后端时的替换点) ===== */
+/* ===== api.js · API Stubs (未来对接后端时的替换点) =====
+ * Phase 1：返回值结构化为 MCP 工具响应格式。
+ * 后续对接 linksprite-backend 时，仅替换函数体内的网络调用部分。
+ */
 
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 /**
  * 获取图层配置
- * TODO: replace with GET /api/wallet/layers — 返回当前用户的图层/配件配置
+ * TODO: replace with GET /api/wallet/layers
  */
 async function fetchLayers() {
   await delay(200);
@@ -17,7 +20,7 @@ async function fetchLayers() {
  */
 async function updateWeight(layerId, traitId, weight) {
   await delay(100);
-  return { ok: true };
+  return { ok: true, layerId, traitId, weight, updatedAt: Date.now() };
 }
 
 /**
@@ -26,7 +29,9 @@ async function updateWeight(layerId, traitId, weight) {
  */
 async function generatePreview(layers) {
   await delay(300);
-  return randomCombination(layers);
+  const combo = randomCombination(layers);
+  const rarity = calcRarity(combo);
+  return { combo, rarity };
 }
 
 /**
@@ -45,7 +50,7 @@ async function generateBatch(count, format, layers, onProgress) {
     if (onProgress) onProgress(results.length / total, results.length, total);
     if (results.length >= total) break;
   }
-  return { results, format };
+  return { results, format, count: results.length, generatedAt: Date.now() };
 }
 
 /**
@@ -54,7 +59,7 @@ async function generateBatch(count, format, layers, onProgress) {
  */
 async function downloadNft(id, format) {
   await delay(200);
-  return { ok: true, url: `#download-${id}-${format}` };
+  return { ok: true, id, format, url: `#download-${id}-${format}`, expiresAt: Date.now() + 3600000 };
 }
 
 /**
@@ -63,5 +68,5 @@ async function downloadNft(id, format) {
  */
 async function downloadBatch(ids, format) {
   await delay(500);
-  return { ok: true, url: '#batch-download' };
+  return { ok: true, ids, format, url: '#batch-download', count: ids.length, expiresAt: Date.now() + 3600000 };
 }
