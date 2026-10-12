@@ -1,0 +1,13 @@
+{
+  "name": "nft-generator",
+  "version": "0.1.0",
+  "description": "连接精灵链 NFT 生成器：图层配置、稀有度权重、批量生成 PNG/GIF",
+  "tools": [
+    { "name": "fetch_layers", "description": "获取图层与配件配置" },
+    { "name": "update_weight", "description": "更新某图层某配件的稀有度权重" },
+    { "name": "generate_preview", "description": "随机生成一个预览组合" },
+    { "name": "generate_batch", "description": "批量生成 NFT 系列（含进度回调）" },
+    { "name": "download_nft", "description": "下载单个 NFT" },
+    { "name": "download_batch", "description": "批量下载 NFT" }
+  ]
+}
