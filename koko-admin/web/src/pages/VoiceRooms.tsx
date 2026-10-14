@@ -14,7 +14,7 @@ import {
 import { Badge, Button, Card, EmptyState, Modal, PageHeader } from '../components/ui/primitives';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
 
-// 语音房管理：实时列出 LiveKit 中的语音房（房间名 = 频道 ID），
+// 语音房管理：实时列出声网 Agora 频道（频道名 = Stoat 频道 ID），
 // 支持查看参与者、移出参与者、解散房间。30 秒自动刷新。
 export default function VoiceRooms() {
   const [selected, setSelected] = useState<VoiceRoom | null>(null);
@@ -90,14 +90,13 @@ export default function VoiceRooms() {
                 <th className="th">空间 / 频道</th>
                 <th className="th">房间 ID</th>
                 <th className="th">人数</th>
-                <th className="th">创建时间</th>
                 <th className="th text-right">操作</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {isLoading ? (
                 <tr>
-                  <td className="td text-gray-400" colSpan={5}>
+                  <td className="td text-gray-400" colSpan={4}>
                     加载中…
                   </td>
                 </tr>
@@ -116,9 +115,6 @@ export default function VoiceRooms() {
                         <Badge tone="gray">空房</Badge>
                       )}
                     </td>
-                    <td className="td whitespace-nowrap text-xs text-gray-500">
-                      {r.created_at ? new Date(r.created_at).toLocaleString('zh-CN', { hour12: false }) : '—'}
-                    </td>
                     <td className="td">
                       <div className="flex justify-end gap-3 text-sm">
                         <button className="text-indigo-600 hover:underline" onClick={() => setSelected(r)}>
@@ -133,7 +129,7 @@ export default function VoiceRooms() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5}>
+                  <td colSpan={4}>
                     <EmptyState text="当前没有进行中的语音房" />
                   </td>
                 </tr>
@@ -211,7 +207,7 @@ export default function VoiceRooms() {
                 </>
               ) : null}
               <br />
-              房内 {pendingClose.num_participants} 名参与者将被强制断开；频道本身不受影响，用户可重新发起语音。
+              房内 {pendingClose.num_participants} 名参与者将被强制断开，且 1 分钟内无法重新加入；频道本身不受影响，之后可重新发起语音。
             </span>
           ) : null
         }
@@ -231,7 +227,7 @@ export default function VoiceRooms() {
         description={
           pendingKick ? (
             <span>
-              用户：<b>{pendingKick.p.username || pendingKick.p.identity}</b>
+              用户：<b>{pendingKick.p.username || `声网用户 ${pendingKick.p.identity}`}</b>
               <br />
               该用户将被移出当前语音房（不封禁账号，可重新加入）。
             </span>
@@ -277,8 +273,7 @@ function ParticipantsModal({
           <thead className="bg-gray-50">
             <tr>
               <th className="th">用户</th>
-              <th className="th">状态</th>
-              <th className="th">加入时间</th>
+              <th className="th">角色</th>
               <th className="th text-right">操作</th>
             </tr>
           </thead>
@@ -286,14 +281,17 @@ function ParticipantsModal({
             {data.items.map((p) => (
               <tr key={p.identity}>
                 <td className="td">
-                  <div className="text-sm font-medium text-gray-900">{p.username || '—'}</div>
-                  <div className="font-mono text-xs text-gray-400">{p.identity.slice(0, 14)}…</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {p.username || `声网用户 ${p.identity}`}
+                  </div>
+                  <div className="font-mono text-xs text-gray-400">
+                    {p.user_id ? `${p.user_id.slice(0, 14)}…` : `uid ${p.identity}（未关联账号）`}
+                  </div>
                 </td>
                 <td className="td">
-                  <Badge tone={p.state === 'ACTIVE' ? 'green' : 'gray'}>{p.state || '—'}</Badge>
-                </td>
-                <td className="td whitespace-nowrap text-xs text-gray-500">
-                  {p.joined_at ? new Date(p.joined_at).toLocaleString('zh-CN', { hour12: false }) : '—'}
+                  <Badge tone={p.role === 'broadcaster' ? 'green' : 'gray'}>
+                    {p.role === 'broadcaster' ? '主播' : '听众'}
+                  </Badge>
                 </td>
                 <td className="td text-right">
                   <Button variant="danger" onClick={() => onKick(p)}>

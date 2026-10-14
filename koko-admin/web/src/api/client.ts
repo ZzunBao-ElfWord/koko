@@ -495,20 +495,19 @@ export function deleteAnnouncement(id: string) {
   return api.delete(`/announcements/${id}`);
 }
 
-// ===== 语音房管理（LiveKit） =====
+// ===== 语音房管理（声网 Agora） =====
 export interface VoiceRoom {
-  room: string; // LiveKit room name（= 频道 ID）
+  room: string; // 声网频道名（= Stoat 频道 ID）
   channel_name: string;
   server_name: string;
   num_participants: number;
-  created_at: string;
 }
 
 export interface VoiceParticipant {
-  identity: string; // 用户 ULID
+  identity: string; // 声网数字 uid（踢人接口入参）
+  user_id: string; // Stoat 用户 ULID（映射缺失时为空）
   username: string;
-  state: string;
-  joined_at: string;
+  role: string; // broadcaster / audience
 }
 
 export async function fetchVoiceRooms(): Promise<{ items: VoiceRoom[] }> {

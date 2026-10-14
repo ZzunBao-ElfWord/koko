@@ -50,7 +50,7 @@ func (d Deps) ListAudit(c *gin.Context) {
 
 	opts := options.Find().
 		SetSort(bson.D{{Key: "created_at", Value: -1}}).
-		SetSkip(int64((page-1)*pageSize)).
+		SetSkip(int64((page - 1) * pageSize)).
 		SetLimit(int64(pageSize))
 
 	cursor, err := col.Find(ctx, filter, opts)

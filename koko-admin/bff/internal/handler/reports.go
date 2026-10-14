@@ -15,13 +15,13 @@ import (
 // Report 按线上文档宽松解码：不同 Stoat/Revolt 版本字段形状可能不同（见 AGENTS.md 第 5 节），
 // Status 保留原始结构，由前端做展示兼容。确认线上形状后再收紧为强类型。
 type Report struct {
-	ID        string `bson:"_id" json:"id"`
-	AuthorID  string `bson:"author_id,omitempty" json:"author_id,omitempty"`
-	TargetID  string `bson:"target_id,omitempty" json:"target_id,omitempty"`
-	Reason    string `bson:"reason,omitempty" json:"reason,omitempty"`
-	Context   string `bson:"context,omitempty" json:"context,omitempty"`
-	Notes     string `bson:"notes,omitempty" json:"notes,omitempty"`
-	Status    any    `bson:"status,omitempty" json:"status,omitempty"`
+	ID       string `bson:"_id" json:"id"`
+	AuthorID string `bson:"author_id,omitempty" json:"author_id,omitempty"`
+	TargetID string `bson:"target_id,omitempty" json:"target_id,omitempty"`
+	Reason   string `bson:"reason,omitempty" json:"reason,omitempty"`
+	Context  string `bson:"context,omitempty" json:"context,omitempty"`
+	Notes    string `bson:"notes,omitempty" json:"notes,omitempty"`
+	Status   any    `bson:"status,omitempty" json:"status,omitempty"`
 }
 
 type reportStatusRequest struct {

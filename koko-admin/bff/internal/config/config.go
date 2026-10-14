@@ -9,29 +9,30 @@ import (
 
 // Config 全部来自环境变量（见 .env.example）。禁止硬编码密钥。
 type Config struct {
-	Port              string
-	MongoURI          string
-	RevoltDB          string
-	AdminDB           string
-	JWTSecret         string
-	JWTTTL            time.Duration
-	DeltaBaseURL      string
-	DeltaAdminToken   string
-	DeltaTokenHeader  string
-	AutumnBaseURL     string
-	MinioEndpoint     string
-	MinioAccessKey    string
-	MinioSecretKey    string
-	MinioBucket       string
-	LiveKitURL        string
-	LiveKitAPIKey     string
-	LiveKitAPISecret  string
-	LinkSpriteBaseURL string
-	LinkSpriteAPIKey  string
-	AllowedIPs        map[string]bool // 登录 IP 白名单；空 = 不限制
-	CORSOrigins       []string
-	BootstrapUsername string
-	BootstrapPassword string
+	Port                string
+	MongoURI            string
+	RevoltDB            string
+	AdminDB             string
+	JWTSecret           string
+	JWTTTL              time.Duration
+	DeltaBaseURL        string
+	DeltaAdminToken     string
+	DeltaTokenHeader    string
+	AutumnBaseURL       string
+	MinioEndpoint       string
+	MinioAccessKey      string
+	MinioSecretKey      string
+	MinioBucket         string
+	AgoraAPIBase        string // 声网云端 REST API 域名（默认 https://api.agora.io，备用 https://api.sd-rtn.com）
+	AgoraAppID          string
+	AgoraCustomerID     string
+	AgoraCustomerSecret string
+	LinkSpriteBaseURL   string
+	LinkSpriteAPIKey    string
+	AllowedIPs          map[string]bool // 登录 IP 白名单；空 = 不限制
+	CORSOrigins         []string
+	BootstrapUsername   string
+	BootstrapPassword   string
 }
 
 func env(key, def string) string {
@@ -68,28 +69,29 @@ func Load() *Config {
 	}
 
 	return &Config{
-		Port:              env("PORT", "8093"),
-		MongoURI:          os.Getenv("MONGO_URI"),
-		RevoltDB:          env("MONGO_REVOLT_DB", "revolt"),
-		AdminDB:           env("MONGO_ADMIN_DB", "koko_admin"),
-		JWTSecret:          os.Getenv("JWT_SECRET"),
-		JWTTTL:            time.Duration(ttlHours) * time.Hour,
-		DeltaBaseURL:      env("DELTA_BASE_URL", "http://delta:8000"),
-		DeltaAdminToken:   os.Getenv("DELTA_ADMIN_TOKEN"),
-		DeltaTokenHeader:  header,
-		AutumnBaseURL:     env("AUTUMN_BASE_URL", "http://autumn:14704"),
-		MinioEndpoint:     env("MINIO_ENDPOINT", "minio:9000"),
-		MinioAccessKey:    os.Getenv("MINIO_ACCESS_KEY"),
-		MinioSecretKey:    os.Getenv("MINIO_SECRET_KEY"),
-		MinioBucket:       env("MINIO_BUCKET", "revolt-uploads"),
-		LiveKitURL:        env("LIVEKIT_URL", "http://livekit:7880"),
-		LiveKitAPIKey:     os.Getenv("LIVEKIT_API_KEY"),
-		LiveKitAPISecret:  os.Getenv("LIVEKIT_API_SECRET"),
-		LinkSpriteBaseURL: env("LINKSPRITE_BASE_URL", "http://linksprite-backend:8080/api"),
-		LinkSpriteAPIKey:  os.Getenv("LINKSPRITE_API_KEY"),
-		AllowedIPs:        allowedIPs,
-		CORSOrigins:       origins,
-		BootstrapUsername: os.Getenv("BOOTSTRAP_ADMIN_USERNAME"),
-		BootstrapPassword: os.Getenv("BOOTSTRAP_ADMIN_PASSWORD"),
+		Port:                env("PORT", "8093"),
+		MongoURI:            os.Getenv("MONGO_URI"),
+		RevoltDB:            env("MONGO_REVOLT_DB", "revolt"),
+		AdminDB:             env("MONGO_ADMIN_DB", "koko_admin"),
+		JWTSecret:           os.Getenv("JWT_SECRET"),
+		JWTTTL:              time.Duration(ttlHours) * time.Hour,
+		DeltaBaseURL:        env("DELTA_BASE_URL", "http://delta:8000"),
+		DeltaAdminToken:     os.Getenv("DELTA_ADMIN_TOKEN"),
+		DeltaTokenHeader:    header,
+		AutumnBaseURL:       env("AUTUMN_BASE_URL", "http://autumn:14704"),
+		MinioEndpoint:       env("MINIO_ENDPOINT", "minio:9000"),
+		MinioAccessKey:      os.Getenv("MINIO_ACCESS_KEY"),
+		MinioSecretKey:      os.Getenv("MINIO_SECRET_KEY"),
+		MinioBucket:         env("MINIO_BUCKET", "revolt-uploads"),
+		AgoraAPIBase:        env("AGORA_API_BASE", "https://api.agora.io"),
+		AgoraAppID:          os.Getenv("AGORA_APP_ID"),
+		AgoraCustomerID:     os.Getenv("AGORA_CUSTOMER_ID"),
+		AgoraCustomerSecret: os.Getenv("AGORA_CUSTOMER_SECRET"),
+		LinkSpriteBaseURL:   env("LINKSPRITE_BASE_URL", "http://linksprite-backend:8080/api"),
+		LinkSpriteAPIKey:    os.Getenv("LINKSPRITE_API_KEY"),
+		AllowedIPs:          allowedIPs,
+		CORSOrigins:         origins,
+		BootstrapUsername:   os.Getenv("BOOTSTRAP_ADMIN_USERNAME"),
+		BootstrapPassword:   os.Getenv("BOOTSTRAP_ADMIN_PASSWORD"),
 	}
 }

@@ -18,10 +18,10 @@ import (
 type messageRow struct {
 	ID        string   `bson:"_id" json:"id"`
 	ChannelID string   `bson:"channel" json:"channel"`
-	AuthorID  string   `bson:"author" json:"author_id"`     // 原始用户 ULID（处置操作要用）
-	Author    string   `bson:"-" json:"author"`             // 展示用用户名（联查填充）
+	AuthorID  string   `bson:"author" json:"author_id"` // 原始用户 ULID（处置操作要用）
+	Author    string   `bson:"-" json:"author"`         // 展示用用户名（联查填充）
 	Content   string   `bson:"content" json:"content"`
-	HitWords  []string `bson:"-" json:"hit_words"`          // 命中的敏感词（空数组 = 未命中）
+	HitWords  []string `bson:"-" json:"hit_words"` // 命中的敏感词（空数组 = 未命中）
 }
 
 // loadBannedWords 读取当前全部敏感词（词表极小，每次请求实时查，保证增删后立即生效）。

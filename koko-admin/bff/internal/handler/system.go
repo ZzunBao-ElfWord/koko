@@ -40,7 +40,8 @@ func (d Deps) SystemHealth(c *gin.Context) {
 		{"January 代理", "january:14705", ""},
 		{"Gifbox", "gifbox:14706", ""},
 		{"MinIO 对象存储", "minio:9000", "/minio/health/live"},
-		{"LiveKit 语音", "livekit:7880", ""},
+		// 语音为声网 Agora 云端 SaaS（外网 API），不在内网容器探测列表；
+		// 其可用性由语音房页面的实时查询直接体现。
 	}
 
 	items := make([]serviceHealth, len(probes))

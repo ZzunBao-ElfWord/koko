@@ -10,7 +10,7 @@ COPY web/ ./
 RUN npm run build
 
 # ---------- stage 2: 构建 BFF（嵌入前端产物） ----------
-FROM golang:1.23-alpine AS api
+FROM golang:1.27-alpine AS api
 WORKDIR /src
 COPY bff/ ./
 COPY --from=web /web/dist ./internal/web/dist

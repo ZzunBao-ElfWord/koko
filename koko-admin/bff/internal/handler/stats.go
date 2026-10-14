@@ -161,15 +161,15 @@ func (d Deps) StatsOverview(c *gin.Context) {
 	lower7, _ := ulid.DayBounds(days[0])
 
 	c.JSON(http.StatusOK, gin.H{
-		"totals":           totals,
-		"new_users_7d":     d.countPerDay(ctx, "users", days),
-		"new_spaces_7d":    d.countPerDay(ctx, "servers", days),
-		"new_messages_7d":  d.countPerDay(ctx, "messages", days),
-		"dau_7d":           d.dauPerDay(ctx, days),
-		"storage":          d.storageSummary(ctx),
-		"top_channels_7d":  d.topChannels(ctx, lower7),
-		"recent_users":     d.recentUsers(ctx),
-		"generated_at":     time.Now().UTC().Format(time.RFC3339),
+		"totals":          totals,
+		"new_users_7d":    d.countPerDay(ctx, "users", days),
+		"new_spaces_7d":   d.countPerDay(ctx, "servers", days),
+		"new_messages_7d": d.countPerDay(ctx, "messages", days),
+		"dau_7d":          d.dauPerDay(ctx, days),
+		"storage":         d.storageSummary(ctx),
+		"top_channels_7d": d.topChannels(ctx, lower7),
+		"recent_users":    d.recentUsers(ctx),
+		"generated_at":    time.Now().UTC().Format(time.RFC3339),
 	})
 }
 

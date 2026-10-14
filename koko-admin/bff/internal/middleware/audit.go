@@ -25,8 +25,8 @@ func Audit(col *mongo.Collection, log *slog.Logger) gin.HandlerFunc {
 		}
 		path := c.Request.URL.Path
 		if !strings.HasPrefix(path, "/api/v1/") ||
-		strings.HasPrefix(path, "/api/v1/auth/login") ||
-		strings.HasPrefix(path, "/api/v1/public/") {
+			strings.HasPrefix(path, "/api/v1/auth/login") ||
+			strings.HasPrefix(path, "/api/v1/public/") {
 			return
 		}
 

@@ -12,11 +12,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
+	"koko-admin-bff/internal/agora"
 	"koko-admin-bff/internal/auth"
 	"koko-admin-bff/internal/config"
 	"koko-admin-bff/internal/delta"
 	"koko-admin-bff/internal/handler"
-	"koko-admin-bff/internal/livekit"
 	"koko-admin-bff/internal/model"
 	"koko-admin-bff/internal/router"
 	"koko-admin-bff/internal/store"
@@ -50,20 +50,20 @@ func main() {
 
 	bootstrapAdmin(ctx, cfg, adminUsers, log)
 
-	lk := livekit.New(cfg.LiveKitURL, cfg.LiveKitAPIKey, cfg.LiveKitAPISecret)
-	if lk == nil {
-		log.Warn("LIVEKIT_API_KEY/LIVEKIT_API_SECRET 未配置，语音房管理不可用")
+	ag := agora.New(cfg.AgoraAPIBase, cfg.AgoraAppID, cfg.AgoraCustomerID, cfg.AgoraCustomerSecret)
+	if ag == nil {
+		log.Warn("AGORA_APP_ID/AGORA_CUSTOMER_ID/AGORA_CUSTOMER_SECRET 未配置完整，语音房管理不可用")
 	}
 
 	deps := handler.Deps{
-		Cfg:     cfg,
-		Log:     log,
-		Mongo:   client,
-		Delta:   delta.New(cfg.DeltaBaseURL, cfg.DeltaAdminToken, cfg.DeltaTokenHeader),
-		Autumn:  delta.New(cfg.AutumnBaseURL, cfg.DeltaAdminToken, cfg.DeltaTokenHeader),
+		Cfg:        cfg,
+		Log:        log,
+		Mongo:      client,
+		Delta:      delta.New(cfg.DeltaBaseURL, cfg.DeltaAdminToken, cfg.DeltaTokenHeader),
+		Autumn:     delta.New(cfg.AutumnBaseURL, cfg.DeltaAdminToken, cfg.DeltaTokenHeader),
 		LinkSprite: delta.New(cfg.LinkSpriteBaseURL, cfg.LinkSpriteAPIKey, "X-API-Key"),
-		Minio:   connectMinio(cfg, log),
-		LiveKit: lk,
+		Minio:      connectMinio(cfg, log),
+		Agora:      ag,
 	}
 
 	r := router.New(deps, auditLogs, adminUsers)

@@ -13,7 +13,7 @@ import (
 
 // VoiceRoomHistory GET /api/v1/voice/history?page=1&page_size=20
 // 语音房操作历史：从审计日志（koko_admin.audit_logs）过滤 /api/v1/voice/* 的变更请求。
-// 语音房本身是实时资源（LiveKit 无持久化），操作轨迹依赖审计中间件落库。
+// 声网频道是实时资源（无服务端持久化），操作轨迹依赖审计中间件落库。
 func (d Deps) VoiceRoomHistory(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if page < 1 {
