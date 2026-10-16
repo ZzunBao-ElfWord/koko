@@ -8,3 +8,6 @@ linksprite-backend/target/
 
 # 研究产出（非代码）
 work/
+
+# 本地密钥
+glitchtip/.env.local

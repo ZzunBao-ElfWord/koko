@@ -1,0 +1,98 @@
+# GlitchTip 自建崩溃监控（Sentry 协议兼容，数据不出境）
+# 服务器部署路径：/opt/glitchtip  启动：docker compose up -d
+#
+# 资源约束：宿主 3.5GB RAM，故全部容器设 mem_limit 上限（CPU 为按需，不限制）
+name: glitchtip
+
+x-environment: &default-environment
+  DATABASE_URL: postgres://glitchtip:${POSTGRES_PASSWORD}@glitchtip-postgres:5432/glitchtip
+  SECRET_KEY: ${SECRET_KEY}
+  PORT: 8000
+  # 无 SMTP：邮件（邀请/验证）打印到容器日志，用 docker compose logs 取链接
+  EMAIL_URL: consolemail://
+  # 对外地址，决定 DSN 与后台链接的生成
+  GLITCHTIP_DOMAIN: ${GLITCHTIP_DOMAIN}
+  DEFAULT_FROM_EMAIL: noreply@kokokongkong.com
+  # 生产部署必须显式声明允许的 Host（含容器内健康检查用的 localhost）
+  ALLOWED_HOSTS: errors.kokokongkong.com,localhost,127.0.0.1,glitchtip-web
+  CELERY_BROKER_URL: redis://glitchtip-redis:6379/0
+  REDIS_URL: redis://glitchtip-redis:6379/0
+  CELERY_WORKER_AUTOSCALE: "1,2"
+  CELERY_WORKER_MAX_TASKS_PER_CHILD: "10000"
+  # 事件保留天数（宿主磁盘 9.5GB 可用，不宜过长）
+  GLITCHTIP_MAX_EVENT_LIFE_DAYS: "30"
+  # 管理员与组织已通过 CLI 预置，关闭自助注册/建组织，避免公网被注册
+  ENABLE_USER_REGISTRATION: "False"
+  ENABLE_ORGANIZATION_CREATION: "False"
+
+x-depends_on: &default-depends_on
+  glitchtip-postgres:
+    condition: service_healthy
+  glitchtip-redis:
+    condition: service_started
+
+services:
+  glitchtip-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: glitchtip
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: glitchtip
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    mem_limit: 384m
+    # 健康检查：确保 migrate/web/worker 等 Postgres 就绪后再启动，避免竞态连接被拒
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U glitchtip -d glitchtip"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  glitchtip-redis:
+    image: valkey/valkey:9-alpine
+    restart: unless-stopped
+    mem_limit: 96m
+
+  # 一次性：执行数据库迁移后退出
+  glitchtip-migrate:
+    image: glitchtip/glitchtip:latest
+    depends_on: *default-depends_on
+    command: ./bin/run-migrate.sh
+    environment: *default-environment
+    mem_limit: 384m
+
+  glitchtip-web:
+    image: glitchtip/glitchtip:latest
+    depends_on: *default-depends_on
+    environment: *default-environment
+    volumes:
+      - uploads:/code/uploads
+    restart: unless-stopped
+    mem_limit: 448m
+    networks:
+      default: {}
+      # 接入 stoat_default，供 Caddy 以容器名 glitchtip-web:8000 反代
+      stoat:
+        aliases:
+          - glitchtip-web
+
+  glitchtip-worker:
+    image: glitchtip/glitchtip:latest
+    depends_on: *default-depends_on
+    command: ./bin/run-celery-with-beat.sh
+    environment: *default-environment
+    volumes:
+      - uploads:/code/uploads
+    restart: unless-stopped
+    mem_limit: 256m
+
+networks:
+  stoat:
+    external: true
+    name: stoat_default
+
+volumes:
+  pg-data:
+  uploads:
