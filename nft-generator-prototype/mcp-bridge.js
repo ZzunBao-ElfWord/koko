@@ -107,7 +107,22 @@
       return res;
     });
 
-    console.log('[mcp-bridge] 6 个 MCP 工具已注册 (标准方案)');
+    // 7. submit_work_submission
+    mc.registerTool('submit_work_submission', {
+      description: '提交作品信息（收单）到平台后台',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          payload: { type: 'object', description: '作品信息收单载荷（统一标准 schema）' }
+        },
+        required: ['payload']
+      }
+    }, async (args) => {
+      const res = await submitWorkSubmission(args?.payload || {});
+      return res;
+    });
+
+    console.log('[mcp-bridge] 7 个 MCP 工具已注册 (标准方案)');
   }
 
   // 回退方案：window.kokoMCP 自定义接口（不依赖 ext-apps SDK）
@@ -120,6 +135,7 @@
         { name: 'generate_batch', description: '批量生成 NFT 系列', inputSchema: { type: 'object', properties: { count: { type: 'number' }, format: { type: 'string' }, layers: { type: 'array' } }, required: ['count', 'format'] } },
         { name: 'download_nft', description: '下载单个 NFT', inputSchema: { type: 'object', properties: { id: { type: 'number' }, format: { type: 'string' } }, required: ['id', 'format'] } },
         { name: 'download_batch', description: '批量下载 NFT', inputSchema: { type: 'object', properties: { ids: { type: 'array' }, format: { type: 'string' } }, required: ['ids', 'format'] } },
+        { name: 'submit_work_submission', description: '提交作品信息（收单）到平台后台', inputSchema: { type: 'object', properties: { payload: { type: 'object' } }, required: ['payload'] } },
       ]),
       callTool: async (name, args) => {
         switch (name) {
@@ -139,11 +155,12 @@
           }
           case 'download_nft': return await downloadNft(args.id, args.format);
           case 'download_batch': return await downloadBatch(args.ids, args.format);
+          case 'submit_work_submission': return await submitWorkSubmission(args?.payload || {});
           default: throw new Error(`未知工具: ${name}`);
         }
       }
     };
-    console.log('[mcp-bridge] 6 个 MCP 工具已注册 (回退方案 window.kokoMCP)');
+    console.log('[mcp-bridge] 7 个 MCP 工具已注册 (回退方案 window.kokoMCP)');
   }
 
   // 等 DOM + api.js 就绪后注册

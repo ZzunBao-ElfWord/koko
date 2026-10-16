@@ -149,6 +149,70 @@
     </div>
   </section>
 
+  <!-- Step 6: 作品信息（创作者填写 + 收单提交） -->
+  <section class="step-section" id="step-6">
+    <h2 class="section-title">填写 <span class="grad">作品信息</span></h2>
+    <p class="section-desc">生成完成后补齐创作人与发行信息。提交后由平台统一整理，用于在鲸探建草稿。</p>
+
+    <div class="card">
+      <div class="card-title">✦ 创作人信息</div>
+      <div class="gen-form">
+        <div class="form-group">
+          <label>创作人名称（≤18字）</label>
+          <input type="text" class="form-input" id="creator-name" maxlength="18" placeholder="如：KOKO 空空">
+        </div>
+        <div class="form-group">
+          <label>创作人头像 URL</label>
+          <input type="text" class="form-input" id="creator-avatar-url" placeholder="https://...">
+        </div>
+        <div class="form-group" style="grid-column:1 / -1;">
+          <label>创作人介绍（≤256字）</label>
+          <textarea class="form-input" id="creator-intro" maxlength="256" rows="3" placeholder="创作人简介..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✦ 商品发行规则</div>
+      <div class="gen-form">
+        <div class="form-group">
+          <label>发行类型</label>
+          <input type="text" class="form-input" id="issue-type" placeholder="如：独立发行">
+        </div>
+        <div class="form-group">
+          <label>商品名称</label>
+          <input type="text" class="form-input" id="product-name" placeholder="商品名称">
+        </div>
+        <div class="form-group">
+          <label>盲盒包含作品数</label>
+          <input type="number" class="form-input" id="blind-box-count" min="1" placeholder="如：1">
+        </div>
+        <div class="form-group">
+          <label>定价档位</label>
+          <input type="text" class="form-input" id="price-tier" placeholder="如：59元">
+        </div>
+        <div class="form-group">
+          <label>期望预售月份</label>
+          <input type="month" class="form-input" id="presale-month">
+        </div>
+        <div class="form-group">
+          <label>预售达标数量</label>
+          <input type="number" class="form-input" id="presale-threshold-qty" min="1" placeholder="如：100">
+        </div>
+        <div class="form-group" style="grid-column:1 / -1;">
+          <label>预售规则</label>
+          <textarea class="form-input" id="presale-rule" rows="3" placeholder="预售规则说明..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✦ 作品列表</div>
+      <div id="works-list"></div>
+      <button class="btn btn-ghost" onclick="addWorkRow()">+ 添加作品</button>
+    </div>
+  </section>
+
 </main>
 
 <!-- ===== Footer ===== -->
@@ -178,7 +242,7 @@ const state = {
   sortBy: 'id',
 };
 
-const STEP_NAMES = ['图层管理', '稀有度', '预览', '生成', '画廊'];
+const STEP_NAMES = ['图层管理', '稀有度', '预览', '生成', '画廊', '作品信息'];
 const TIER_LABELS = { common: '普通', rare: '稀有', epic: '史诗', legendary: '传说' };
 const TIER_COLORS = { common: 'var(--text-sub)', rare: '#42a5f5', epic: '#ab47bc', legendary: 'var(--gold-light)' };
 
@@ -212,7 +276,8 @@ function goToStep(n) {
   // 按钮状态
   document.getElementById('prev-btn').style.visibility = n === 1 ? 'hidden' : 'visible';
   const nextBtn = document.getElementById('next-btn');
-  if (n === 5) { nextBtn.textContent = '完成 ✓'; }
+  if (n === 6) { nextBtn.textContent = '提交作品信息'; }
+  else if (n === 5) { nextBtn.textContent = '填写作品信息 →'; }
   else if (n === 4) { nextBtn.textContent = '查看结果 →'; }
   else { nextBtn.textContent = '下一步 →'; }
   // 步骤特定渲染
@@ -220,12 +285,13 @@ function goToStep(n) {
   if (n === 3) { if (!state.previewCombo) regenPreview(); else renderPreview(); }
   if (n === 4) renderFormatInfo();
   if (n === 5) renderGallery();
+  if (n === 6) renderWorkForm();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function nextStep() {
-  if (state.step < 5) goToStep(state.step + 1);
-  else showToast('生成流程已完成！');
+  if (state.step < 6) goToStep(state.step + 1);
+  else submitSubmission();
 }
 function prevStep() { if (state.step > 1) goToStep(state.step - 1); }
 
@@ -403,6 +469,9 @@ async function startGeneration() {
   document.getElementById('progress-fill').style.width = '0%';
   document.getElementById('progress-label').textContent = '生成中...';
 
+  // 生成本次系列的唯一 ID（作为收单幂等键）
+  state.seriesId = 'SERIES-' + new Date().toISOString().replace(/[-:TZ.]/g, '').slice(0, 14);
+
   // 模拟生成（画廊展示前 24 张）
   const galleryCount = Math.min(24, state.genCount);
   state.results = generateResults(galleryCount, state.layers);
@@ -477,6 +546,128 @@ function sortGallery(sort) {
   document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
   document.querySelector(`[data-sort="${sort}"]`).classList.add('active');
   renderGallery();
+}
+
+// ===== Step 6: 作品信息（创作者填写 + 收单提交） =====
+function renderWorkForm() {
+  const list = document.getElementById('works-list');
+  if (!list.children.length) addWorkRow();
+}
+
+function addWorkRow() {
+  const list = document.getElementById('works-list');
+  const row = document.createElement('div');
+  row.className = 'work-row';
+  row.style.cssText = 'padding:16px; margin-bottom:16px; border:1px solid var(--border); border-radius:var(--radius-md); background:rgba(10,9,6,.3);';
+  row.innerHTML = `
+    <div class="gen-form">
+      <div class="form-group"><label>作品名称</label><input type="text" class="form-input" data-field="workName" placeholder="作品名称"></div>
+      <div class="form-group"><label>作品分类</label><input type="text" class="form-input" data-field="workCategory" placeholder="如：数字艺术"></div>
+      <div class="form-group"><label>作品简介</label><textarea class="form-input" rows="2" data-field="workSummary" placeholder="作品简介"></textarea></div>
+      <div class="form-group"><label>作品详情图 URL（多个用换行或逗号分隔）</label><textarea class="form-input" rows="2" data-field="detailImageUrls" placeholder="https://a.png, https://b.png"></textarea></div>
+      <div class="form-group"><label>中奖概率（全部作品合计 = 100）</label><input type="number" class="form-input" data-field="winningProbability" min="0" max="100" placeholder="如：100"></div>
+      <div class="form-group"><label>鲸探手机号</label><input type="text" class="form-input" data-field="jingtanPhone" placeholder="绑定鲸探的手机号"></div>
+      <div class="form-group"><label>作品介绍视频 URL（可选）</label><input type="text" class="form-input" data-field="workIntroVideoUrl" placeholder="https://..."></div>
+      <div class="form-group"><label>视频封面 URL（可选）</label><input type="text" class="form-input" data-field="videoCoverUrl" placeholder="https://..."></div>
+      <div class="form-group"><label>详情页背景图 URL（可选）</label><input type="text" class="form-input" data-field="detailBgUrl" placeholder="https://..."></div>
+      <div class="form-group"><label>底座（可选）</label><input type="text" class="form-input" data-field="pedestal" placeholder="底座样式"></div>
+      <div class="form-group"><label>特殊 AC 编码权益绑定（可选）</label><input type="text" class="form-input" data-field="specialAcCode"></div>
+      <div class="form-group"><label>详情页附属 icon URL（可选）</label><input type="text" class="form-input" data-field="detailIconUrl" placeholder="https://..."></div>
+      <div class="form-group"><label>作品类型（可选）</label><input type="text" class="form-input" data-field="workType" placeholder="如：图片"></div>
+      <div class="form-group"><label><input type="checkbox" data-field="onHomepage"> 放入鲸探主页</label></div>
+    </div>
+    <div style="text-align:right;">
+      <button class="btn btn-ghost" onclick="this.closest('.work-row').remove()">移除</button>
+    </div>`;
+  list.appendChild(row);
+}
+
+function collectWorkSubmission() {
+  const val = (id) => (document.getElementById(id)?.value || '').trim();
+  const works = Array.from(document.querySelectorAll('#works-list .work-row')).map(row => {
+    const g = (name) => (row.querySelector('[data-field="' + name + '"]')?.value || '').trim();
+    const num = (name) => {
+      const v = row.querySelector('[data-field="' + name + '"]')?.value;
+      return v === '' || v == null ? null : Number(v);
+    };
+    const chk = (name) => !!row.querySelector('[data-field="' + name + '"]')?.checked;
+    return {
+      workName: g('workName'),
+      workCategory: g('workCategory') || null,
+      workSummary: g('workSummary') || null,
+      workIntroVideoUrl: g('workIntroVideoUrl') || null,
+      videoCoverUrl: g('videoCoverUrl') || null,
+      detailBgUrl: g('detailBgUrl') || null,
+      pedestal: g('pedestal') || null,
+      specialAcCode: g('specialAcCode') || null,
+      detailImages: g('detailImageUrls').split(/[\n,，]/).map(s => s.trim()).filter(Boolean),
+      onHomepage: chk('onHomepage'),
+      jingtanPhone: g('jingtanPhone') || null,
+      detailIconUrl: g('detailIconUrl') || null,
+      workType: g('workType') || null,
+      winningProbability: num('winningProbability'),
+    };
+  });
+  return {
+    seriesId: state.seriesId,
+    generatorJobId: state.seriesId,
+    totalVersions: state.genCount,
+    format: state.genFormat === 'gif' ? 'gif' : 'png',
+    versions: state.results.map(r => ({
+      index: r.id,
+      filename: r.id.toString().padStart(4, '0') + (state.genFormat === 'gif' ? '.gif' : '.png'),
+      rarityScore: r.rarity.score,
+      rarityTier: r.rarity.tier,
+      traits: Object.fromEntries((r.combo || []).filter(l => l._selected).map(l => [l.name, l._selected.name])),
+    })),
+    creatorName: val('creator-name'),
+    creatorAvatarUrl: val('creator-avatar-url') || null,
+    creatorIntro: val('creator-intro') || null,
+    issueType: val('issue-type') || null,
+    productName: val('product-name'),
+    blindBoxCount: val('blind-box-count') === '' ? null : Number(val('blind-box-count')),
+    priceTier: val('price-tier') || null,
+    presaleMonth: val('presale-month') || null,
+    presaleThresholdQty: val('presale-threshold-qty') || null,
+    presaleRuleHtml: val('presale-rule') || null,
+    works: works,
+  };
+}
+
+function validateSubmission(p) {
+  if (!p.seriesId) return '尚未生成作品，请先完成生成步骤';
+  if (!p.creatorName) return '请填写创作人名称';
+  if (p.creatorName.length > 18) return '创作人名称不能超过 18 字';
+  if ((p.creatorIntro || '').length > 256) return '创作人介绍不能超过 256 字';
+  if (!p.productName) return '请填写商品名称';
+  if (!p.works.length) return '请至少添加一个作品';
+  if (p.works.some(w => !w.workName)) return '每个作品都需要填写作品名称';
+  const probs = p.works.map(w => Number(w.winningProbability) || 0);
+  if (probs.some(v => v > 0)) {
+    const sum = probs.reduce((s, v) => s + v, 0);
+    if (sum !== 100) return '中奖概率合计需为 100（当前 ' + sum + '）';
+  }
+  return null;
+}
+
+async function submitSubmission() {
+  const payload = collectWorkSubmission();
+  const err = validateSubmission(payload);
+  if (err) { showToast('✕ ' + err); return; }
+  const btn = document.getElementById('next-btn');
+  btn.disabled = true; btn.textContent = '提交中...';
+  let res = null;
+  try {
+    res = await submitWorkSubmission(payload);
+  } catch (e) {
+    res = { ok: false, error: (e && e.message) ? e.message : String(e) };
+  }
+  btn.disabled = false; btn.textContent = '提交作品信息';
+  if (res && res.ok) {
+    showToast('✓ 提交成功，编号 #' + res.id);
+  } else {
+    showToast('✕ 提交失败：' + ((res && res.error) || '未知错误'));
+  }
 }
 
 // ===== Toast =====

@@ -70,3 +70,29 @@ async function downloadBatch(ids, format) {
   await delay(500);
   return { ok: true, ids, format, url: '#batch-download', count: ids.length, expiresAt: Date.now() + 3600000 };
 }
+
+/**
+ * 提交作品信息（收单）
+ *
+ * 网页运行在 KOKO App 的小程序容器内，外部 HTTP 请求由宿主（Flutter）代发，
+ * 因此这里通过 callHandler('kokoBusiness') 交由宿主 POST 到 linksprite-backend。
+ * 非宿主环境（浏览器直接打开原型）不做假成功，直接返回错误提示。
+ */
+async function submitWorkSubmission(payload) {
+  const host = window.flutter_inappwebview;
+  if (!host || typeof host.callHandler !== 'function') {
+    return { ok: false, error: '当前环境不支持提交（请在 KOKO App 的小程序内打开）' };
+  }
+  try {
+    const res = await host.callHandler('kokoBusiness', {
+      action: 'submit_work_submission',
+      payload,
+    });
+    if (!res || typeof res !== 'object') {
+      return { ok: false, error: '宿主返回为空' };
+    }
+    return res;
+  } catch (e) {
+    return { ok: false, error: (e && e.message) ? e.message : String(e) };
+  }
+}
