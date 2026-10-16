@@ -68,9 +68,11 @@ export default function Reports() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="th">举报 ID</th>
-                <th className="th">理由</th>
+                <th className="th">类型</th>
+                <th className="th">理由与内容</th>
                 <th className="th">对象 ID</th>
                 <th className="th">举报人</th>
+                <th className="th">时间</th>
                 <th className="th">状态</th>
                 <th className="th text-right">操作</th>
               </tr>
@@ -78,20 +80,33 @@ export default function Reports() {
             <tbody className="divide-y divide-gray-100">
               {isLoading ? (
                 <tr>
-                  <td className="td text-gray-400" colSpan={6}>
+                  <td className="td text-gray-400" colSpan={8}>
                     加载中…
                   </td>
                 </tr>
               ) : data && data.items.length > 0 ? (
                 data.items.map((r) => {
                   const st = statusOf(r.status);
+                  const snapshot = contextPreview(r.context);
                   return (
                     <tr key={r.id}>
                       <td className="td font-mono text-xs text-gray-400">{r.id.slice(0, 12)}…</td>
-                      <td className="td max-w-xs">
-                        <div className="truncate font-medium text-gray-900">{r.reason || '—'}</div>
-                        {r.context ? (
-                          <div className="truncate text-xs text-gray-400">{r.context}</div>
+                      <td className="td whitespace-nowrap text-xs text-gray-500">
+                        {r.target_type === 'user' ? '用户' : r.target_type === 'message' ? '消息' : '—'}
+                      </td>
+                      <td className="td max-w-sm">
+                        <div className="truncate font-medium text-gray-900">
+                          {r.reason_text || r.reason || '—'}
+                        </div>
+                        {snapshot ? (
+                          <div className="truncate text-xs text-gray-400" title={snapshot}>
+                            {snapshot}
+                          </div>
+                        ) : null}
+                        {r.notes ? (
+                          <div className="truncate text-xs text-amber-600" title={r.notes}>
+                            补充：{r.notes}
+                          </div>
                         ) : null}
                       </td>
                       <td className="td font-mono text-xs text-gray-500">
@@ -99,6 +114,9 @@ export default function Reports() {
                       </td>
                       <td className="td font-mono text-xs text-gray-500">
                         {r.author_id ? r.author_id.slice(0, 12) + '…' : '—'}
+                      </td>
+                      <td className="td whitespace-nowrap text-xs text-gray-400">
+                        {r.at ? new Date(r.at * 1000).toLocaleString('zh-CN', { hour12: false }) : '—'}
                       </td>
                       <td className="td">
                         {st === 'resolved' ? (
@@ -128,7 +146,7 @@ export default function Reports() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={6}>
+                  <td colSpan={8}>
                     <EmptyState text="暂无举报" />
                   </td>
                 </tr>
@@ -146,7 +164,7 @@ export default function Reports() {
             <span>
               举报 ID：<span className="font-mono">{pending.report.id}</span>
               <br />
-              理由：{pending.report.reason || '—'}
+              理由：{pending.report.reason_text || pending.report.reason || '—'}
               <br />
               {pending.action === 'Rejected'
                 ? '驳回表示该举报无效或无需处置，将标记为已驳回。'
@@ -169,6 +187,19 @@ export default function Reports() {
       {mutation.error ? <div className="mt-3 text-sm text-red-600">{errText(mutation.error)}</div> : null}
     </div>
   );
+}
+
+// 举报证据快照（koko-auth 写入的 context JSON）→ 行内摘要
+function contextPreview(context?: string): string {
+  if (!context) return '';
+  try {
+    const o = JSON.parse(context) as Record<string, unknown>;
+    if (typeof o.content === 'string' && o.content) return o.content;
+    if (typeof o.username === 'string' && o.username) return `用户：${o.username}`;
+    return '';
+  } catch {
+    return context; // 旧数据可能是纯文本
+  }
 }
 
 // 兼容 status 为字符串或对象的不同版本（见 AGENTS.md 第 5 节）

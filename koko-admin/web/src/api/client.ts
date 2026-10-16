@@ -28,10 +28,13 @@ export interface SafetyReport {
   id: string;
   author_id?: string;
   target_id?: string;
+  target_type?: string;
   reason?: string;
+  reason_text?: string;
   context?: string;
   notes?: string;
   status?: unknown;
+  at?: number;
 }
 
 export interface AuditEntry {
