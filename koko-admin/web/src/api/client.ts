@@ -228,21 +228,19 @@ export async function login(username: string, password: Promise<string> | string
 
 export const fetchMe = async (): Promise<Me> => (await api.get<Me>('/auth/me')).data;
 
-// ===== 全局设置 =====
+// ===== 空间头部卡片跳转链接（一个空间一个） =====
 
-export interface GlobalSettings {
+export interface SpaceHeaderLink {
   header_link: string;
-  updated_at?: string;
-  updated_by?: string;
 }
 
-export async function fetchGlobalSettings(): Promise<GlobalSettings> {
-  const { data } = await api.get<GlobalSettings>('/settings');
+export async function fetchSpaceHeaderLink(spaceId: string): Promise<SpaceHeaderLink> {
+  const { data } = await api.get<SpaceHeaderLink>(`/spaces/${spaceId}/header-link`);
   return data;
 }
 
-export function updateGlobalSettings(headerLink: string) {
-  return api.patch('/settings', { header_link: headerLink });
+export function updateSpaceHeaderLink(spaceId: string, headerLink: string) {
+  return api.patch(`/spaces/${spaceId}/header-link`, { header_link: headerLink });
 }
 
 export const fetchStats = async (): Promise<StatsOverview> =>
@@ -521,6 +519,7 @@ export interface VoiceRoom {
   channel_name: string;
   server_name: string;
   num_participants: number;
+  created_at?: string;
 }
 
 export interface VoiceParticipant {
@@ -528,6 +527,8 @@ export interface VoiceParticipant {
   user_id: string; // Stoat 用户 ULID（映射缺失时为空）
   username: string;
   role: string; // broadcaster / audience
+  state?: string;
+  joined_at?: string;
 }
 
 export async function fetchVoiceRooms(): Promise<{ items: VoiceRoom[] }> {

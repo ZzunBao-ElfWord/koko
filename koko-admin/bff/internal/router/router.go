@@ -36,8 +36,8 @@ func New(d handler.Deps, auditCol *mongo.Collection, adminUsersCol *mongo.Collec
 	// 公开：B 端合作申请（限流，无 JWT）
 	api.POST("/public/b2b-apply", middleware.RateLimit(5, time.Minute), d.SubmitB2bApply)
 
-	// 公开：App 读取全局设置（当前只有社区头部跳转链接）
-	api.GET("/public/settings", middleware.RateLimit(120, time.Minute), d.GetPublicSettings)
+	// 公开：App 读取空间头部卡片跳转链接（按空间区分，未配置返回空串）
+	api.GET("/public/spaces/:id/header-link", middleware.RateLimit(300, time.Minute), d.GetPublicSpaceHeaderLink)
 
 	// 需登录
 	authed := api.Group("")
@@ -93,16 +93,16 @@ func New(d handler.Deps, auditCol *mongo.Collection, adminUsersCol *mongo.Collec
 		authed.DELETE("/spaces/:id/members/:uid", modOnly, d.KickSpaceMember)
 		authed.DELETE("/channels/:cid", modOnly, d.DeleteChannel)
 
+		// 空间头部卡片跳转链接（一个空间一个，后台配置）
+		authed.GET("/spaces/:id/header-link", modOnly, d.GetSpaceHeaderLink)
+		authed.PATCH("/spaces/:id/header-link", modOnly, d.UpdateSpaceHeaderLink)
+
 		// 连接精灵链（NFT 融合）：查询 super/moderator；写操作在 handler 内仅放行 super
 		authed.Any("/chain/*proxy", modOnly, d.LinkSpriteProxy)
 
 		// B 端合作申请管理
 		authed.GET("/b2b/applications", modOnly, d.ListB2bApplications)
 		authed.PATCH("/b2b/applications/:id", modOnly, d.UpdateB2bApplicationStatus)
-
-		// 全局设置：社区头部卡片统一跳转链接
-		authed.GET("/settings", modOnly, d.GetSettings)
-		authed.PATCH("/settings", modOnly, d.UpdateSettings)
 
 		// Delta 管理动作透传（兜底通道）
 		authed.Any("/delta/*proxy", modOnly, d.DeltaProxy)

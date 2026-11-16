@@ -8,7 +8,6 @@ import Spaces from './pages/Spaces';
 import Media from './pages/Media';
 import BannedWords from './pages/BannedWords';
 import Announcements from './pages/Announcements';
-import GlobalSettings from './pages/GlobalSettings';
 import VoiceRooms from './pages/VoiceRooms';
 import ChainStatus from './pages/chain/ChainStatus';
 import ChainAuth from './pages/chain/ChainAuth';
@@ -100,13 +99,6 @@ export const menuItems: MenuItem[] = [
     glyph: '🔊',
     roles: mods,
     element: <VoiceRooms />,
-  },
-  {
-    path: '/global-settings',
-    label: '全局设置',
-    glyph: '🔗',
-    roles: mods,
-    element: <GlobalSettings />,
   },
   // 连接精灵链（NFT 融合）—— 侧边栏归入「NFT·连接精灵链」分组
   // 查询 moderator+，链上写操作仅 super_admin（BFF 强制）

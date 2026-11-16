@@ -1,6 +1,6 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api, errText, fetchSpaceBans } from '../api/client';
+import { api, errText, fetchSpaceBans, fetchSpaceHeaderLink, updateSpaceHeaderLink } from '../api/client';
 import { Badge, Button, Card, EmptyState, Input, PageHeader } from '../components/ui/primitives';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
 
@@ -40,7 +40,7 @@ interface ChannelRow {
 }
 
 type View = 'list' | 'detail';
-type Tab = 'members' | 'channels' | 'bans';
+type Tab = 'members' | 'channels' | 'link' | 'bans';
 
 export default function Spaces() {
   const [view, setView] = useState<View>('list');
@@ -169,6 +169,9 @@ function SpaceDetail({ space, onBack }: { space: SpaceRow; onBack: () => void })
         <Button variant={tab === 'channels' ? 'primary' : 'secondary'} onClick={() => setTab('channels')}>
           频道管理
         </Button>
+        <Button variant={tab === 'link' ? 'primary' : 'secondary'} onClick={() => setTab('link')}>
+          头部链接
+        </Button>
         <Button variant={tab === 'bans' ? 'primary' : 'secondary'} onClick={() => setTab('bans')}>
           封禁列表
         </Button>
@@ -178,10 +181,86 @@ function SpaceDetail({ space, onBack }: { space: SpaceRow; onBack: () => void })
         <MembersPanel spaceId={space.id} />
       ) : tab === 'channels' ? (
         <ChannelsPanel spaceId={space.id} />
+      ) : tab === 'link' ? (
+        <HeaderLinkPanel spaceId={space.id} />
       ) : (
         <BansPanel spaceId={space.id} />
       )}
     </div>
+  );
+}
+
+// ===== 头部链接（空间头部卡片点击跳转地址） =====
+function HeaderLinkPanel({ spaceId }: { spaceId: string }) {
+  const queryClient = useQueryClient();
+  const [link, setLink] = useState('');
+  const [saved, setSaved] = useState(false);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['space-header-link', spaceId],
+    queryFn: () => fetchSpaceHeaderLink(spaceId),
+  });
+
+  useEffect(() => {
+    setLink(data?.header_link ?? '');
+  }, [data]);
+
+  const mutation = useMutation({
+    mutationFn: (value: string) => updateSpaceHeaderLink(spaceId, value),
+    onSuccess: (_res, value) => {
+      queryClient.invalidateQueries({ queryKey: ['space-header-link', spaceId] });
+      setLink(value);
+      setSaved(true);
+    },
+  });
+
+  const isPreviewable = link.startsWith('http://') || link.startsWith('https://');
+
+  return (
+    <Card>
+      <div className="max-w-2xl space-y-3 p-6">
+        <div>
+          <div className="mb-1 text-sm font-medium text-gray-900">头部跳转链接</div>
+          <div className="text-xs text-gray-500">
+            点击该空间社区顶部卡片时跳转的地址，每个空间独立配置；留空表示不跳转。仅支持 http:// 或 https:// 地址。
+          </div>
+        </div>
+
+        {error ? <div className="text-sm text-red-600">{errText(error, '读取链接失败')}</div> : null}
+
+        <Input
+          type="url"
+          placeholder="https://example.com/activity"
+          value={link}
+          disabled={isLoading || mutation.isPending}
+          onChange={(e) => {
+            setLink(e.target.value);
+            setSaved(false);
+          }}
+        />
+
+        <div className="flex items-center gap-3">
+          <Button
+            variant="primary"
+            disabled={isLoading || mutation.isPending}
+            onClick={() => mutation.mutate(link.trim())}
+          >
+            {mutation.isPending ? '保存中…' : '保存'}
+          </Button>
+          {saved && !mutation.isPending ? <span className="text-sm text-green-600">已保存</span> : null}
+        </div>
+
+        {mutation.error ? (
+          <div className="text-sm text-red-600">{errText(mutation.error, '保存失败')}</div>
+        ) : null}
+
+        {isPreviewable ? (
+          <a className="text-sm text-indigo-600 hover:underline" href={link} target="_blank" rel="noreferrer">
+            预览链接
+          </a>
+        ) : null}
+      </div>
+    </Card>
   );
 }
 
