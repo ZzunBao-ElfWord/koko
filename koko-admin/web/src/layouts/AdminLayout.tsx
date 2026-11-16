@@ -131,8 +131,8 @@ export default function AdminLayout() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (newPwd.length < 10) {
-                setPwdError('新密码至少 10 位');
+              if (newPwd.length < 8) {
+                setPwdError('新密码至少 8 位');
                 return;
               }
               pwdMutation.mutate();
@@ -150,7 +150,7 @@ export default function AdminLayout() {
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700">新密码（至少 10 位）</label>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700">新密码（至少 8 位）</label>
               <Input
                 type="password"
                 className="w-full"

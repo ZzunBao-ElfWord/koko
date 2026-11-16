@@ -72,7 +72,7 @@ func (d Deps) Me(c *gin.Context) {
 
 type changePasswordRequest struct {
 	OldPassword string `json:"old_password" binding:"required"`
-	NewPassword string `json:"new_password" binding:"required,min=10,max=128"`
+	NewPassword string `json:"new_password" binding:"required,min=8,max=128"`
 }
 
 // ChangePassword POST /api/v1/auth/change-password
@@ -80,7 +80,7 @@ type changePasswordRequest struct {
 func (d Deps) ChangePassword(c *gin.Context) {
 	var req changePasswordRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "bad_request", "message": "新密码至少 10 位"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "bad_request", "message": "新密码至少 8 位"})
 		return
 	}
 

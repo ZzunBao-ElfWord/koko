@@ -74,8 +74,8 @@ export default function Settings() {
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    if (password.length < 10) {
-      setError('密码至少 10 位');
+    if (password.length < 8) {
+      setError('密码至少 8 位');
       return;
     }
     mutation.mutate();
@@ -135,14 +135,14 @@ export default function Settings() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (newPwd.length < 10) {
-              setResetError('密码至少 10 位');
+            if (newPwd.length < 8) {
+              setResetError('密码至少 8 位');
               return;
             }
             resetMutation.mutate();
           }}
         >
-          <label className="mb-1.5 block text-sm font-medium text-gray-700">新密码（至少 10 位）</label>
+          <label className="mb-1.5 block text-sm font-medium text-gray-700">新密码（至少 8 位）</label>
           <Input
             type="text"
             className="w-full"
@@ -198,7 +198,7 @@ export default function Settings() {
               className="w-56"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="至少 10 位"
+              placeholder="至少 8 位"
               required
             />
           </div>

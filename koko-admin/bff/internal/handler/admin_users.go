@@ -41,7 +41,7 @@ func (d Deps) ListAdminUsers(c *gin.Context) {
 
 type createAdminRequest struct {
 	Username string `json:"username" binding:"required,min=2,max=64"`
-	Password string `json:"password" binding:"required,min=10,max=128"`
+	Password string `json:"password" binding:"required,min=8,max=128"`
 	Role     string `json:"role" binding:"required"`
 }
 
@@ -49,7 +49,7 @@ type createAdminRequest struct {
 func (d Deps) CreateAdminUser(c *gin.Context) {
 	var req createAdminRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "bad_request", "message": "参数不合法（密码至少 10 位）"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "bad_request", "message": "参数不合法（密码至少 8 位）"})
 		return
 	}
 	if !model.ValidRoles[req.Role] {
@@ -88,7 +88,7 @@ func (d Deps) CreateAdminUser(c *gin.Context) {
 }
 
 type resetPasswordRequest struct {
-	Password string `json:"password" binding:"required,min=10,max=128"`
+	Password string `json:"password" binding:"required,min=8,max=128"`
 }
 
 // ResetAdminPassword PUT /api/v1/admin-users/:id/password（仅 super_admin）
@@ -96,7 +96,7 @@ type resetPasswordRequest struct {
 func (d Deps) ResetAdminPassword(c *gin.Context) {
 	var req resetPasswordRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "bad_request", "message": "密码至少 10 位"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "bad_request", "message": "密码至少 8 位"})
 		return
 	}
 
