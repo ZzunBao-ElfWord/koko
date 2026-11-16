@@ -36,6 +36,9 @@ func New(d handler.Deps, auditCol *mongo.Collection, adminUsersCol *mongo.Collec
 	// 公开：B 端合作申请（限流，无 JWT）
 	api.POST("/public/b2b-apply", middleware.RateLimit(5, time.Minute), d.SubmitB2bApply)
 
+	// 公开：App 读取全局设置（当前只有社区头部跳转链接）
+	api.GET("/public/settings", middleware.RateLimit(120, time.Minute), d.GetPublicSettings)
+
 	// 需登录
 	authed := api.Group("")
 	authed.Use(middleware.JWTAuth(d.Cfg.JWTSecret, adminUsersCol))
@@ -96,6 +99,10 @@ func New(d handler.Deps, auditCol *mongo.Collection, adminUsersCol *mongo.Collec
 		// B 端合作申请管理
 		authed.GET("/b2b/applications", modOnly, d.ListB2bApplications)
 		authed.PATCH("/b2b/applications/:id", modOnly, d.UpdateB2bApplicationStatus)
+
+		// 全局设置：社区头部卡片统一跳转链接
+		authed.GET("/settings", modOnly, d.GetSettings)
+		authed.PATCH("/settings", modOnly, d.UpdateSettings)
 
 		// Delta 管理动作透传（兜底通道）
 		authed.Any("/delta/*proxy", modOnly, d.DeltaProxy)

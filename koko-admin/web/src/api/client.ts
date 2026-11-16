@@ -228,6 +228,23 @@ export async function login(username: string, password: Promise<string> | string
 
 export const fetchMe = async (): Promise<Me> => (await api.get<Me>('/auth/me')).data;
 
+// ===== 全局设置 =====
+
+export interface GlobalSettings {
+  header_link: string;
+  updated_at?: string;
+  updated_by?: string;
+}
+
+export async function fetchGlobalSettings(): Promise<GlobalSettings> {
+  const { data } = await api.get<GlobalSettings>('/settings');
+  return data;
+}
+
+export function updateGlobalSettings(headerLink: string) {
+  return api.patch('/settings', { header_link: headerLink });
+}
+
 export const fetchStats = async (): Promise<StatsOverview> =>
   (await api.get<StatsOverview>('/stats/overview')).data;
 
