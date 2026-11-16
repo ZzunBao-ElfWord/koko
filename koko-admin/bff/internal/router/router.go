@@ -39,6 +39,9 @@ func New(d handler.Deps, auditCol *mongo.Collection, adminUsersCol *mongo.Collec
 	// 公开：App 读取空间头部卡片跳转链接（按空间区分，未配置返回空串）
 	api.GET("/public/spaces/:id/header-link", middleware.RateLimit(300, time.Minute), d.GetPublicSpaceHeaderLink)
 
+	// 公开：App 轮询语音频道在线人数（channelId → count，不含用户列表）
+	api.GET("/public/voice/rooms", middleware.RateLimit(120, time.Minute), d.ListPublicVoiceRooms)
+
 	// 需登录
 	authed := api.Group("")
 	authed.Use(middleware.JWTAuth(d.Cfg.JWTSecret, adminUsersCol))

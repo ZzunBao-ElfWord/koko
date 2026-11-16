@@ -262,3 +262,32 @@ func (d Deps) KickVoiceParticipant(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"ok": true})
 }
+
+// ListPublicVoiceRooms GET /api/v1/public/voice/rooms
+// C 端可查：返回所有活跃语音频道的在线人数（channelId → count）。
+// 频道在线人数与 Discord 语音频道人数一样属于公开状态，不含用户列表，无需鉴权。
+// Agora 未配置时降级返回空 map，不暴露内部错误。
+func (d Deps) ListPublicVoiceRooms(c *gin.Context) {
+	if d.Agora == nil {
+		c.JSON(http.StatusOK, gin.H{"rooms": gin.H{}})
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
+	rooms, err := d.Agora.ListRooms(ctx)
+	if err != nil {
+		d.Log.Error("agora list public rooms failed", "error", err)
+		c.JSON(http.StatusBadGateway, gin.H{"error": "upstream_error", "message": "查询语音房失败"})
+		return
+	}
+
+	counts := make(map[string]int, len(rooms))
+	for _, r := range rooms {
+		if r.UserCount > 0 {
+			counts[r.ChannelName] = r.UserCount
+		}
+	}
+	c.JSON(http.StatusOK, gin.H{"rooms": counts})
+}
