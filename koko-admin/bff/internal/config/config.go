@@ -19,6 +19,7 @@ type Config struct {
 	DeltaAdminToken     string
 	DeltaTokenHeader    string
 	AutumnBaseURL       string
+	AutumnPublicURL     string // 附件对外访问前缀，后台预览头图用
 	MinioEndpoint       string
 	MinioAccessKey      string
 	MinioSecretKey      string
@@ -79,6 +80,7 @@ func Load() *Config {
 		DeltaAdminToken:     os.Getenv("DELTA_ADMIN_TOKEN"),
 		DeltaTokenHeader:    header,
 		AutumnBaseURL:       env("AUTUMN_BASE_URL", "http://autumn:14704"),
+		AutumnPublicURL:     env("AUTUMN_PUBLIC_URL", "https://kokokongkong.com/autumn"),
 		MinioEndpoint:       env("MINIO_ENDPOINT", "minio:9000"),
 		MinioAccessKey:      os.Getenv("MINIO_ACCESS_KEY"),
 		MinioSecretKey:      os.Getenv("MINIO_SECRET_KEY"),

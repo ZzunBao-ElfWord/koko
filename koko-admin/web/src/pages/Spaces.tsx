@@ -1,6 +1,14 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api, errText, fetchSpaceBans, fetchSpaceHeaderLink, updateSpaceHeaderLink } from '../api/client';
+import {
+  api,
+  errText,
+  fetchSpaceBanner,
+  fetchSpaceBans,
+  fetchSpaceHeaderLink,
+  reviewSpaceBanner,
+  updateSpaceHeaderLink,
+} from '../api/client';
 import { Badge, Button, Card, EmptyState, Input, PageHeader } from '../components/ui/primitives';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
 
@@ -182,7 +190,10 @@ function SpaceDetail({ space, onBack }: { space: SpaceRow; onBack: () => void })
       ) : tab === 'channels' ? (
         <ChannelsPanel spaceId={space.id} />
       ) : tab === 'link' ? (
-        <HeaderLinkPanel spaceId={space.id} />
+        <div className="space-y-4">
+          <HeaderLinkPanel spaceId={space.id} />
+          <BannerPanel spaceId={space.id} />
+        </div>
       ) : (
         <BansPanel spaceId={space.id} />
       )}
@@ -259,6 +270,126 @@ function HeaderLinkPanel({ spaceId }: { spaceId: string }) {
             预览链接
           </a>
         ) : null}
+      </div>
+    </Card>
+  );
+}
+
+// ===== 空间头图：后台上传 → 审核 → 通过后客户端才显示 =====
+function BannerPanel({ spaceId }: { spaceId: string }) {
+  const queryClient = useQueryClient();
+  const [note, setNote] = useState('');
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['space-banner', spaceId],
+    queryFn: () => fetchSpaceBanner(spaceId),
+  });
+
+  const refresh = () => queryClient.invalidateQueries({ queryKey: ['space-banner', spaceId] });
+
+  const review = useMutation({
+    mutationFn: ({ action, attachmentId }: { action: 'approve' | 'reject'; attachmentId: string }) =>
+      reviewSpaceBanner(spaceId, attachmentId, action, note.trim()),
+    onError: refresh,
+    onSuccess: () => {
+      setNote('');
+      refresh();
+    },
+  });
+
+  const current = data?.current ?? null;
+  const pending = data?.pending ?? null;
+  const awaitingReview = pending?.status === 'pending';
+  const busy = review.isPending || pending?.status === 'reviewing';
+  const statusText: Record<string, string> = {
+    pending: '待审核',
+    reviewing: '审核处理中',
+    approved: '已通过',
+    rejected: '已驳回',
+  };
+
+  return (
+    <Card>
+      <div className="max-w-2xl space-y-4 p-6">
+        <div>
+          <div className="mb-1 text-sm font-medium text-gray-900">空间头图审核</div>
+          <div className="text-xs text-gray-500">
+            审核通过后更新客户端显示的头图，驳回则保留当前头图。
+          </div>
+        </div>
+
+        {error ? <div className="text-sm text-red-600">{errText(error, '读取头图失败')}</div> : null}
+
+        <div>
+          <div className="mb-2 text-xs font-medium text-gray-600">当前显示的头图</div>
+          {current ? (
+            <div className="flex items-start gap-3">
+              <img
+                src={current.url}
+                alt="当前头图"
+                className="h-28 w-64 rounded-lg border border-gray-200 object-cover"
+              />
+              <span className="text-xs text-gray-400">{current.attachment_id}</span>
+            </div>
+          ) : (
+            <div className="text-xs text-gray-400">未设置，客户端显示默认渐变背景</div>
+          )}
+        </div>
+
+        {pending ? (
+          <div className="space-y-2 rounded-lg border border-gray-200 p-3">
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <span>最近一次提交</span>
+              <Badge
+                tone={
+                  pending.status === 'approved'
+                    ? 'green'
+                    : pending.status === 'rejected'
+                      ? 'red'
+                      : 'amber'
+                }
+              >
+                {statusText[pending.status ?? ''] ?? pending.status}
+              </Badge>
+              {pending.uploaded_by ? <span>由 {pending.uploaded_by} 提交</span> : null}
+            </div>
+            <img
+              src={pending.url}
+              alt="待审核头图"
+              className="h-28 w-64 rounded-lg border border-gray-200 object-cover"
+            />
+            {pending.status === 'rejected' && pending.note ? (
+              <div className="text-xs text-red-600">驳回原因：{pending.note}</div>
+            ) : null}
+            {awaitingReview ? (
+              <>
+                <Input
+                  placeholder="驳回原因（通过时可不填）"
+                  value={note}
+                  disabled={busy}
+                  onChange={(e) => setNote(e.target.value)}
+                />
+                <div className="flex items-center gap-3">
+                  <Button variant="primary" disabled={busy} onClick={() => review.mutate({ action: 'approve', attachmentId: pending.attachment_id })}>
+                    {review.isPending ? '处理中…' : '审核通过并上架'}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    disabled={busy || !note.trim()}
+                    onClick={() => review.mutate({ action: 'reject', attachmentId: pending.attachment_id })}
+                  >
+                    驳回
+                  </Button>
+                </div>
+              </>
+            ) : null}
+            {review.error ? (
+              <div className="text-sm text-red-600">{errText(review.error, '审核失败')}</div>
+            ) : null}
+          </div>
+        ) : isLoading || error ? null : (
+          <div className="text-sm text-gray-500">暂无头图审核记录</div>
+        )}
       </div>
     </Card>
   );

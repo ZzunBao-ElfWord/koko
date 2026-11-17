@@ -243,6 +243,46 @@ export function updateSpaceHeaderLink(spaceId: string, headerLink: string) {
   return api.patch(`/spaces/${spaceId}/header-link`, { header_link: headerLink });
 }
 
+// ===== 空间头图：后台上传，审核通过后写入 Stoat banner =====
+
+export type SpaceBannerStatus = 'pending' | 'reviewing' | 'approved' | 'rejected';
+
+export interface SpaceBannerInfo {
+  attachment_id: string;
+  url: string;
+  status?: SpaceBannerStatus;
+  note?: string;
+  filename?: string;
+  uploaded_at?: string;
+  uploaded_by?: string;
+  reviewed_at?: string;
+  reviewed_by?: string;
+}
+
+export interface SpaceBanner {
+  current: SpaceBannerInfo | null;
+  pending: SpaceBannerInfo | null;
+}
+
+export async function fetchSpaceBanner(spaceId: string): Promise<SpaceBanner> {
+  const { data } = await api.get<SpaceBanner>(`/spaces/${spaceId}/banner`);
+  return data;
+}
+
+export async function reviewSpaceBanner(
+  spaceId: string,
+  attachmentId: string,
+  action: 'approve' | 'reject',
+  note = '',
+): Promise<SpaceBanner> {
+  const { data } = await api.post<SpaceBanner>(`/spaces/${spaceId}/banner/review`, {
+    attachment_id: attachmentId,
+    action,
+    note,
+  });
+  return data;
+}
+
 export const fetchStats = async (): Promise<StatsOverview> =>
   (await api.get<StatsOverview>('/stats/overview')).data;
 

@@ -99,6 +99,9 @@ func New(d handler.Deps, auditCol *mongo.Collection, adminUsersCol *mongo.Collec
 		// 空间头部卡片跳转链接（一个空间一个，后台配置）
 		authed.GET("/spaces/:id/header-link", modOnly, d.GetSpaceHeaderLink)
 		authed.PATCH("/spaces/:id/header-link", modOnly, d.UpdateSpaceHeaderLink)
+		// 空间头图：后台上传 → 待审核 → 通过后写入 Stoat banner
+		authed.GET("/spaces/:id/banner", modOnly, d.GetSpaceBanner)
+		authed.POST("/spaces/:id/banner/review", modOnly, d.ReviewSpaceBanner)
 
 		// 连接精灵链（NFT 融合）：查询 super/moderator；写操作在 handler 内仅放行 super
 		authed.Any("/chain/*proxy", modOnly, d.LinkSpriteProxy)
